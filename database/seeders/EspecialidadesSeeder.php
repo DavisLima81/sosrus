@@ -16,27 +16,35 @@ class EspecialidadesSeeder extends Seeder
         //criar especialidades
         DB::table('especialidades')->insert([
             //praças
-            ['nome' => 'Combatente', 'sigla' => '00', 'codigo' => ''],
-            ['nome' => 'Busca e Salvamento', 'sigla' => '01', 'codigo' => ''],
-            ['nome' => 'Motorista', 'sigla' => '02', 'codigo' => ''],
-            ['nome' => 'Manutenção', 'sigla' => '03', 'codigo' => ''],
-            ['nome' => 'Músico', 'sigla' => '04', 'codigo' => ''],
-            ['nome' => 'Comunicações', 'sigla' => '05', 'codigo' => ''],
-            ['nome' => 'Auxiliar de Saúde', 'sigla' => '06', 'codigo' => ''],
-            ['nome' => 'Corneteiro', 'sigla' => '07', 'codigo' => ''],
-            ['nome' => 'Operador de embarcações', 'sigla' => '08', 'codigo' => ''],
-            ['nome' => 'Operador de hidrantes', 'sigla' => '09', 'codigo' => ''],
-            ['nome' => 'Guarda Vidas', 'sigla' => '10', 'codigo' => ''],
+            ['quadro_id' => 1, 'nome' => 'Combatente', 'sigla' => '00', 'codigo' => ''],
+            ['quadro_id' => 1, 'nome' => 'Busca e Salvamento', 'sigla' => '01', 'codigo' => ''],
+            ['quadro_id' => 1, 'nome' => 'Motorista', 'sigla' => '02', 'codigo' => ''],
+            ['quadro_id' => 1, 'nome' => 'Manutenção', 'sigla' => '03', 'codigo' => ''],
+            ['quadro_id' => 1, 'nome' => 'Músico', 'sigla' => '04', 'codigo' => ''],
+            ['quadro_id' => 1, 'nome' => 'Comunicações', 'sigla' => '05', 'codigo' => ''],
+            ['quadro_id' => 1, 'nome' => 'Auxiliar de Saúde', 'sigla' => '06', 'codigo' => ''],
+            ['quadro_id' => 1, 'nome' => 'Corneteiro', 'sigla' => '07', 'codigo' => ''],
+            ['quadro_id' => 1, 'nome' => 'Operador de embarcações', 'sigla' => '08', 'codigo' => ''],
+            ['quadro_id' => 1, 'nome' => 'Operador de hidrantes', 'sigla' => '09', 'codigo' => ''],
+            ['quadro_id' => 1, 'nome' => 'Guarda Vidas', 'sigla' => '10', 'codigo' => ''],
+            ['quadro_id' => 7, 'nome' => 'Combatente', 'sigla' => 'COM', 'codigo' => ''],
             //oficiais
-            ['nome' => 'Combatente', 'sigla' => 'COM', 'codigo' => ''],
-            ['nome' => 'Médico', 'sigla' => 'MED', 'codigo' => ''],
-            ['nome' => 'Psicólogo', 'sigla' => 'PSI', 'codigo' => ''],
-            ['nome' => 'Nutrólogo', 'sigla' => 'NUT', 'codigo' => ''],
-            ['nome' => 'Assistente Social', 'sigla' => 'ASS', 'codigo' => ''],
-            ['nome' => 'Enfermeiro', 'sigla' => 'ENF', 'codigo' => ''],
-
-
-
+            ['quadro_id' => 2, 'nome' => 'Combatente', 'sigla' => 'COM', 'codigo' => ''],
+            ['quadro_id' => 3, 'nome' => 'Médico', 'sigla' => 'MED', 'codigo' => ''],
+            ['quadro_id' => 3, 'nome' => 'Psicólogo', 'sigla' => 'PSI', 'codigo' => ''],
+            ['quadro_id' => 3, 'nome' => 'Nutrólogo', 'sigla' => 'NUT', 'codigo' => ''],
+            ['quadro_id' => 3, 'nome' => 'Assistente Social', 'sigla' => 'ASS', 'codigo' => ''],
+            ['quadro_id' => 3, 'nome' => 'Enfermeiro', 'sigla' => 'ENF', 'codigo' => ''],
+            ['quadro_id' => 3, 'nome' => 'Fonoaudiólogo', 'sigla' => 'FON', 'codigo' => ''],
+            ['quadro_id' => 4, 'nome' => 'Administrativo', 'sigla' => 'ADM', 'codigo' => ''],
+            ['quadro_id' => 5, 'nome' => 'Evangélico', 'sigla' => 'EVA', 'codigo' => ''],
+            ['quadro_id' => 5, 'nome' => 'Católico', 'sigla' => 'CAT', 'codigo' => ''],
+            ['quadro_id' => 6, 'nome' => 'Médico', 'sigla' => 'MED', 'codigo' => ''],
+            ['quadro_id' => 6, 'nome' => 'Psicólogo', 'sigla' => 'PSI', 'codigo' => ''],
+            ['quadro_id' => 6, 'nome' => 'Nutrólogo', 'sigla' => 'NUT', 'codigo' => ''],
+            ['quadro_id' => 6, 'nome' => 'Assistente Social', 'sigla' => 'ASS', 'codigo' => ''],
+            ['quadro_id' => 6, 'nome' => 'Enfermeiro', 'sigla' => 'ENF', 'codigo' => ''],
+            ['quadro_id' => 6, 'nome' => 'Fonoaudiólogo', 'sigla' => 'FON', 'codigo' => ''],
         ]);
     }
 }

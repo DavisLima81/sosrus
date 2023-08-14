@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('especialidades', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('quadro_id')->constrained('quadros');
             $table->string('nome');
             $table->string('sigla');
             $table->string('codigo');
             $table->timestamps();
+
         });
     }
 

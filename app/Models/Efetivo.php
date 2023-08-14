@@ -24,11 +24,13 @@ class Efetivo extends Model
         'funcao_id',
         'status_id',
         'data_nascimento',
+        'user_id',
         'foto',
         'created_at',
         'updated_at',
     ];
 
+    //region RELATIONSHIPS
     public function quadro(): BelongsTo
     {
         return $this->belongsTo(Quadro::class);
@@ -64,4 +66,16 @@ class Efetivo extends Model
         return $this->belongsTo(Precedencia::class);
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+    //endregion
+
+    //region SETTERS
+    public function setTrigramaAttribute($value)
+    {
+        $this->attributes['trigrama'] = mb_strtoupper($value);
+    }
+    //endregion
 }

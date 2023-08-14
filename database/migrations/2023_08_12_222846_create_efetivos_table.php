@@ -23,6 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('secao_id')->nullable();
             $table->unsignedBigInteger('funcao_id')->nullable();
             $table->unsignedBigInteger('status_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->date('data_nascimento')->nullable();
             $table->string('foto')->nullable();
             $table->timestamps();
@@ -34,6 +35,7 @@ return new class extends Migration
             $table->foreign('secao_id')->references('id')->on('secoes');
             $table->foreign('funcao_id')->references('id')->on('funcoes');
             $table->foreign('status_id')->references('id')->on('status');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

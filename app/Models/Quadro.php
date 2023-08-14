@@ -23,4 +23,9 @@ class Quadro extends Model
     {
         return $this->hasMany(Efetivo::class);
     }
+
+    public function especialidades(): HasMany
+    {
+        return $this->hasMany(Especialidade::class);
+    }
 }

@@ -5,10 +5,14 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\EfetivoResource\Pages;
 use App\Filament\Resources\EfetivoResource\RelationManagers;
 use App\Models\Efetivo;
+use App\Models\Especialidade;
+use App\Models\Quadro;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -51,12 +55,21 @@ class EfetivoResource extends Resource
                                     ->maxLength(100)
                                     ->columnSpan(2),
                                 Forms\Components\Select::make('quadro_id')
-                                    ->relationship('quadro', 'sigla')
+                                    ->options(Quadro::all()->pluck('sigla', 'id')->toArray())
                                     ->label('Quadro')
+                                    ->reactive()
+                                    ->afterStateUpdated(fn (callable $set) => $set('especialidade_id', null))
                                     ->required()
                                     ->columnSpan(1),
                                 Forms\Components\Select::make('especialidade_id')
-                                    ->relationship('especialidade', 'sigla')
+                                    ->options(function (callable $get) {
+                                        $quadro = Quadro::find($get('quadro_id'));
+                                        if (!$quadro) {
+                                            return Especialidade::all()->pluck('nome', 'id')->toArray();
+                                        }
+                                        return $quadro->especialidades->pluck('nome', 'id')->toArray();
+                                    })
+                                    ->disabled(fn (callable $get) => !$get('quadro_id'))
                                     ->label('Especialidade')
                                     ->required()
                                     ->columnSpan(1),
@@ -76,14 +89,19 @@ class EfetivoResource extends Resource
                                     ->columnSpan(1),
                                 Forms\Components\Select::make('status_id')
                                     ->relationship('status', 'nome')
-                                    ->label('Seção')
+                                    ->label('Condição')
                                     ->required()
                                     ->columnSpan(1),
-                                Forms\Components\DatePicker::make('nascimento')
+                                Forms\Components\DatePicker::make('data_nascimento')
                                     ->default('d-m-Y')
                                     ->label('Nascimento')
-                                    ->format('d/m/Y')
+                                    ->displayFormat('d/m/Y')
                                     ->required()
+                                    ->columnSpan(1),
+                                Forms\Components\Select::make('user_id')
+                                    ->relationship('user', 'email')
+                                    ->label('Usuário')
+                                    ->nullable()
                                     ->columnSpan(1),
 
                             ])
@@ -101,6 +119,25 @@ class EfetivoResource extends Resource
         return $table
             ->columns([
                 //
+                TextColumn::make('trigrama')
+                    ->sortable()
+                    ->searchable()
+                    ->label('TRIG'),
+
+                TextColumn::make('precedencia.sigla')
+                    ->sortable()
+                    ->searchable()
+                    ->label('POSTO/GRAD'),
+
+                TextColumn::make('nome_guerra')
+                    ->sortable()
+                    ->searchable()
+                    ->label('GUERRA'),
+
+                TextColumn::make('user.email')
+                    ->sortable()
+                    ->searchable()
+                    ->label('USUÁRIO'),
             ])
             ->filters([
                 //
