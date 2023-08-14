@@ -16,9 +16,23 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class UserResource extends Resource
 {
+    //region RESOURCE CONFIGURATION
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $label = 'Usuário';
+
+    protected static ?string $pluralLabel = 'Usuários';
+
+    protected static ?int $navigationSort = 20;
+
+    protected static ?string $slug = 'usuarios';
+
+    protected static ?string $navigationIcon = 'heroicon-o-user';
+
+    protected static ?string $navigationGroup = 'Acesso';
+
+    protected static bool $shouldRegisterNavigation = true;                         //aplica filtro para acesso apenas a usuario registrado em FilamentServiceProvider
+    //endregion
 
     public static function form(Form $form): Form
     {

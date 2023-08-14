@@ -19,9 +19,23 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class EfetivoResource extends Resource
 {
+    //region RESOURCE CONFIGURATION
     protected static ?string $model = Efetivo::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $label = 'Efetivo';
+
+    protected static ?string $pluralLabel = 'Efetivos';
+
+    protected static ?int $navigationSort = 10;
+
+    protected static ?string $slug = 'efetivos';
+
+    protected static ?string $navigationIcon = 'heroicon-o-identification';
+
+    protected static ?string $navigationGroup = 'Gerencial';
+
+    protected static bool $shouldRegisterNavigation = true;                         //aplica filtro para acesso apenas a usuario registrado em FilamentServiceProvider
+    //endregion
 
     public static function form(Form $form): Form
     {

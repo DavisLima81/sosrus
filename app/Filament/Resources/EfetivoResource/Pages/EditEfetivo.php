@@ -16,4 +16,9 @@ class EditEfetivo extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+    //Redirect to index after create
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

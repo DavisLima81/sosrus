@@ -31,7 +31,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'nav.group' => 'Credenciais',
+    'nav.group' => 'Acesso',
     'nav.role.label' => 'Credenciais',
     'nav.role.icon' => 'heroicon-o-shield-check',
     'resource.label.role' => 'Credencial',
