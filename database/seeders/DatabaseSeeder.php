@@ -29,6 +29,9 @@ class DatabaseSeeder extends Seeder
             FuncoesSeeder::class,
             StatusSeeder::class,
             EfetivosSeeder::class,
+            EscalaTiposSeeder::class,
+            RegimesSeeder::class,
+            GuarnicoesSeeder::class,
         ]);
     }
 }

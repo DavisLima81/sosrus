@@ -16,4 +16,9 @@ class EditRegime extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+    //Redirect to index after update
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

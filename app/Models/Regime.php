@@ -15,6 +15,7 @@ class Regime extends Model
         'sigla',
         'nome',
         'descricao',
+        'carga',
         'created_at',
         'updated_at',
         'deleted_at',

@@ -54,6 +54,7 @@ class EfetivoResource extends Resource
                                 Forms\Components\TextInput::make('trigrama')
                                     ->label('Trigrama')
                                     ->required()
+                                    ->unique()
                                     ->rule('size:3')
                                     ->maxLength(3)
                                     ->extraInputAttributes(['style' => 'text-transform:uppercase'])

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nome');
             $table->string('nome_guerra');
-            $table->string('trigrama', 3);
+            $table->string('trigrama', 3)->unique();
             $table->unsignedBigInteger('precedencia_id');
             $table->unsignedBigInteger('quadro_id');
             $table->unsignedBigInteger('especialidade_id')->nullable();

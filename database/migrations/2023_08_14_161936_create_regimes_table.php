@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('sigla', 10)->unique();
             $table->string('nome', 100)->unique();
             $table->string('descricao', 255)->nullable();
+            $table->unsignedInteger('carga');
             $table->timestamps();
         });
     }
