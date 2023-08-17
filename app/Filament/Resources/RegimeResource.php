@@ -99,6 +99,7 @@ class RegimeResource extends Resource
                     ->extraCellAttributes(['class' => 'width-1/8'])
                     ->label('Descrição'),*/
             ])
+            ->defaultSort('sigla', 'asc')
             ->filters([
                 //
             ])

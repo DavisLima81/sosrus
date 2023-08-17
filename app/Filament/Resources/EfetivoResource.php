@@ -37,8 +37,10 @@ class EfetivoResource extends Resource
     protected static bool $shouldRegisterNavigation = true;                         //aplica filtro para acesso apenas a usuario registrado em FilamentServiceProvider
     //endregion
 
+    //region FORM
     public static function form(Form $form): Form
     {
+
         return $form
             ->schema([
                 //criar campos
@@ -54,7 +56,7 @@ class EfetivoResource extends Resource
                                 Forms\Components\TextInput::make('trigrama')
                                     ->label('Trigrama')
                                     ->required()
-                                    ->unique()
+                                    ->unique(ignoreRecord: true)
                                     ->rule('size:3')
                                     ->maxLength(3)
                                     ->extraInputAttributes(['style' => 'text-transform:uppercase'])
@@ -117,6 +119,7 @@ class EfetivoResource extends Resource
                                     ->relationship('user', 'email')
                                     ->label('Usuário')
                                     ->nullable()
+                                    ->unique(ignoreRecord: true)
                                     ->columnSpan(1),
 
                             ])
@@ -125,9 +128,9 @@ class EfetivoResource extends Resource
                                 'lg' => 4,
                             ]),
                     ]),
-
             ]);
     }
+    //enregion
 
     public static function table(Table $table): Table
     {
@@ -154,6 +157,7 @@ class EfetivoResource extends Resource
                     ->searchable()
                     ->label('USUÁRIO'),
             ])
+            ->defaultSort('trigrama', 'asc')
             ->filters([
                 //
             ])

@@ -58,6 +58,7 @@ class UserResource extends Resource
                     ->searchable()
                     ->label('EMAIL'),
             ])
+            ->defaultSort('name', 'asc')
             ->filters([
                 //
             ])

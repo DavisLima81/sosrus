@@ -23,7 +23,7 @@ class EscalaTipoResource extends Resource
 
     protected static ?string $pluralLabel = 'Tipos de escalas';
 
-    protected static ?int $navigationSort = 12;
+    protected static ?int $navigationSort = 13;
 
     protected static ?string $slug = 'escala-tipos';
 
@@ -73,6 +73,7 @@ class EscalaTipoResource extends Resource
                     ->searchable()
                     ->label('Descrição'),*/
             ])
+            ->defaultSort('nome', 'asc')
             ->filters([
                 //
             ])

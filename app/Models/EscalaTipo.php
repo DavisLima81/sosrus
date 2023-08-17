@@ -17,4 +17,9 @@ class EscalaTipo extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function escalas(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Escala::class, 'escala_tipo_id');
+    }
 }

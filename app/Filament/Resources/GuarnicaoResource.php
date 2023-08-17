@@ -23,7 +23,7 @@ class GuarnicaoResource extends Resource
 
     protected static ?string $pluralLabel = 'Guarnições';
 
-    protected static ?int $navigationSort = 11;
+    protected static ?int $navigationSort = 12;
 
     protected static ?string $slug = 'guarnicoes';
 
@@ -86,6 +86,7 @@ class GuarnicaoResource extends Resource
                     ->extraCellAttributes(['class' => 'width-1/8'])
                     ->label('Descrição'),*/
             ])
+            ->defaultSort('sigla', 'asc')
             ->filters([
                 //
             ])
