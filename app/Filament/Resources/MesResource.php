@@ -51,6 +51,7 @@ class MesResource extends Resource
                                         date('Y') => date('Y'),
                                         date('Y') + 1 => date('Y') + 1,
                                     ])
+                                    ->default(date('Y'))
                                     ->reactive()
                                     ->columnSpan(1),
                                 Forms\Components\Select::make('do_ano_mes_id')
@@ -79,7 +80,7 @@ class MesResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->label('ANO'),
-                TextColumn::make('doAnoMeses.id')
+                TextColumn::make('do_ano_mes_id')
                     ->sortable()
                     ->searchable()
                     ->label('MÊS'),

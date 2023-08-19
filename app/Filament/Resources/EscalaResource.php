@@ -104,10 +104,10 @@ class EscalaResource extends Resource
         return $table
             ->columns([
                 //
-                TextColumn::make('escala_tipo.nome')
+                TextColumn::make('regime.sigla')
                     ->sortable()
                     ->searchable()
-                    ->label('TIPO'),
+                    ->label('REGIME'),
                 TextColumn::make('guarnicao.sigla')
                     ->sortable()
                     ->searchable()
@@ -122,11 +122,6 @@ class EscalaResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->label('DURAÇÃO (h)'),
-
-                TextColumn::make('regime.sigla')
-                    ->sortable()
-                    ->searchable()
-                    ->label('REGIME'),
             ])
             ->defaultSort('nome')
             ->filters([
