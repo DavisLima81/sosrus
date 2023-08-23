@@ -25,13 +25,13 @@ class MesResource extends Resource
 
     protected static ?string $pluralLabel = 'Meses';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 11;
 
     protected static ?string $slug = 'meses';
 
     protected static ?string $navigationIcon = 'heroicon-o-view-columns';
 
-    protected static ?string $navigationGroup = 'Escalas';
+    protected static ?string $navigationGroup = 'Gerencial';
 
     protected static bool $shouldRegisterNavigation = true;                         //aplica filtro para acesso apenas a usuario registrado em FilamentServiceProvider
     //endregion
@@ -118,6 +118,8 @@ class MesResource extends Resource
             'index' => Pages\ListMes::route('/'),
             'create' => Pages\CreateMes::route('/create'),
             'edit' => Pages\EditMes::route('/{record}/edit'),
+            'grid' => Pages\GridMes::route('/{record?}/grade'),
+
         ];
     }
 }
