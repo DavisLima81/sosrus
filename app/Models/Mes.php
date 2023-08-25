@@ -6,6 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $do_ano_mes_id
+ * @property int $ano
+ * @property int $created_at
+ * @property int $updated_at
+ * @property int $id
+ * @property int $numero_dias
+ * @property int $numero_dias_uteis
+ * @property int $primeiro_dia_semana
+ *
+ */
 class Mes extends Model
 {
     use HasFactory;
@@ -19,31 +30,46 @@ class Mes extends Model
         'updated_at',
     ];
 
-    //calcular numero de dias do mes
-    public function numeroDias($ano, $numero) : int
+    public function __construct(array $attributes = [
+        ])
     {
-        return cal_days_in_month(CAL_GREGORIAN, $numero, $ano);
+        parent::__construct($attributes);
+    }
+
+    //calcular numero de dias do mes
+    public function numeroDias() : int
+    {
+        $do_ano_mes_id = $this->do_ano_mes_id;
+        $ano = $this->ano;
+        return cal_days_in_month(CAL_GREGORIAN, $do_ano_mes_id, $ano);
     }
 
     //calcular numero de dias uteis do mes
-    public function numeroDiasUteis($ano, $numero) : int
+    //TODO: Incluir a lógica para considerar os feriados
+    //TODO: Criar uma classe e tabela para os feriados
+    public function numeroDiasUteis() : int
     {
-        $numeroDias = $this->numeroDias($ano, $numero);
-        $numeroDiasUteis = 0;
-        for ($i = 1; $i <= $numeroDias; $i++) {
-            $diaSemana = date('w', strtotime($ano . '-' . $numero . '-' . $i));
-            if ($diaSemana != 0 && $diaSemana != 6) {
-                $numeroDiasUteis++;
+        $numero_dias = $this->numeroDias();
+        $numero_dias_uteis = 0;
+        $ano = $this->ano;
+        $do_ano_mes_id = $this->do_ano_mes_id;
+
+        for ($i = 1; $i <= $numero_dias; $i++) {
+            $dia_semana = date('w', strtotime($ano . '-' . $do_ano_mes_id . '-' . $i));
+            if ($dia_semana != 0 && $dia_semana != 6) {
+                $numero_dias_uteis++;
             }
         }
-        return $numeroDiasUteis;
+        return $numero_dias_uteis;
     }
 
     //calcular primeiro dia da semana do mes
-    public function primeiroDiaSemana($ano, $numero) : int
+    public function primeiroDiaSemana() : int
     {
-        $diaSemana = date('w', strtotime($ano . '-' . $numero . '-01'));
-        return $diaSemana;
+        $do_ano_mes_id = $this->do_ano_mes_id;
+        $ano = $this->ano;
+        $primeiro_dia_semana = date('w', strtotime($ano . '-' . $do_ano_mes_id . '-01'));
+        return $primeiro_dia_semana;
     }
     //relacionamentos
     public function doAnoMeses() : BelongsTo
