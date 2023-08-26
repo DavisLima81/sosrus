@@ -45,6 +45,7 @@ class GuarnicaoResource extends Resource
                             ->required()
                             ->length(3)
                             ->rule('size:3')
+                            ->unique(ignoreRecord: true)
                             ->extraInputAttributes(['style' => 'text-transform:uppercase'])
                             ->columnSpan(1),
                         Forms\Components\TextInput::make('nome')
@@ -95,7 +96,7 @@ class GuarnicaoResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    //
                 ]),
             ])
             ->emptyStateActions([

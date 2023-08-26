@@ -58,7 +58,6 @@ class EscalaResource extends Resource
                                 Forms\Components\TextInput::make('nome')
                                     ->label('Nome')
                                     ->required()
-                                    ->unique()
                                     ->rule('max:10')
                                     ->maxLength(10)
                                     ->extraInputAttributes(['style' => 'text-transform:uppercase'])
@@ -105,10 +104,10 @@ class EscalaResource extends Resource
         return $table
             ->columns([
                 //
-                TextColumn::make('escala_tipo.nome')
+                TextColumn::make('regime.sigla')
                     ->sortable()
                     ->searchable()
-                    ->label('TIPO'),
+                    ->label('REGIME'),
                 TextColumn::make('guarnicao.sigla')
                     ->sortable()
                     ->searchable()
@@ -122,13 +121,9 @@ class EscalaResource extends Resource
                 TextColumn::make('duracao')
                     ->sortable()
                     ->searchable()
-                    ->label('DURAÇÃO'),
-
-                TextColumn::make('regime.sigla')
-                    ->sortable()
-                    ->searchable()
-                    ->label('REGIME'),
+                    ->label('DURAÇÃO (h)'),
             ])
+            ->defaultSort('nome')
             ->filters([
                 //
             ])
@@ -137,7 +132,7 @@ class EscalaResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    //
                 ]),
             ])
             ->emptyStateActions([

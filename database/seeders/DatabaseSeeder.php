@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             EscalaTiposSeeder::class,
             RegimesSeeder::class,
             GuarnicoesSeeder::class,
+            DoAnoMesesSeeder::class,
         ]);
     }
 }
