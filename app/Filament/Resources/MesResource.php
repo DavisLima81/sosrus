@@ -13,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use function Laravel\Prompts\alert;
 
@@ -86,6 +87,21 @@ class MesResource extends Resource
                     ->label('MÊS'),
                 TextColumn::make('doAnoMeses.nome')
                     ->label(''),
+                TextColumn::make('numero_dias')
+                    ->state(function (Model $record) : int {
+                        return $record->numeroDias();
+                    })
+                    ->label('DIAS'),
+                TextColumn::make('numero_dias_uteis')
+                    ->state(function (Model $record) : int {
+                        return $record->numeroDiasUteis();
+                    })
+                    ->label('ÚTEIS'),
+                TextColumn::make('$numero_feriados')
+                    ->state(function (Model $record) : int {
+                        return $record->numeroFeriados();
+                    })
+                    ->label('FERIADOS'),
 
             ])
             ->defaultSort(fn (Builder $query) => $query->orderBy('do_ano_mes_id', 'desc'))
@@ -97,7 +113,7 @@ class MesResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    //
                 ]),
             ])
             ->emptyStateActions([
