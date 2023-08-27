@@ -47,10 +47,12 @@ class FeriadoResource extends Resource
                             ->schema([
                                 Forms\Components\TextInput::make('nome')
                                     ->label('Nome')
+                                    ->required()
                                     ->columnSpan(3),
                                 Forms\Components\DatePicker::make('data')
                                     ->label('Data')
                                     ->displayFormat('d/m/Y')
+                                    ->unique(ignoreRecord: true)
                                     ->columnSpan(1),
                             ])
                             ->columns([

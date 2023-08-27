@@ -1,0 +1,65 @@
+{
+    "name": "andrewdwallo/filament-companies",
+    "description": "A Laravel Authentication System based on Companies built using Filament",
+    "keywords": [
+        "andrewdwallo",
+        "wallo",
+        "laravel",
+        "tailwind",
+        "auth",
+        "companies",
+        "filament",
+        "erp"
+    ],
+    "homepage": "https://github.com/andrewdwallo/filament-companies",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andrew Wallo",
+            "email": "andrewdwallo@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "ext-json": "*",
+        "filament/filament": "^3.0",
+        "illuminate/console": "^10.0",
+        "illuminate/contracts": "^10.0",
+        "illuminate/support": "^10.0",
+        "laravel/fortify": "^1.15",
+        "laravel/socialite": "^5.6",
+        "matomo/device-detector": "^6.1"
+    },
+    "require-dev": {
+        "laravel/sanctum": "^3.0",
+        "livewire/livewire": "^3.0@beta",
+        "mockery/mockery": "^1.0",
+        "orchestra/testbench": "^8.0",
+        "phpunit/phpunit": "^9.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Wallo\\FilamentCompanies\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Wallo\\FilamentCompanies\\Tests\\": "tests/",
+            "App\\": "stubs/app/",
+            "Database\\Factories\\": "database/factories/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Wallo\\FilamentCompanies\\FilamentCompaniesServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

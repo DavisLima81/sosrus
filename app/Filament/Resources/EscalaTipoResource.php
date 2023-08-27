@@ -43,6 +43,7 @@ class EscalaTipoResource extends Resource
                         Forms\Components\TextInput::make('nome')
                             ->label('Nome')
                             ->required()
+                            ->unique(ignoreRecord: true)
                             ->maxLength(100)
                             ->columnSpan(4),
                         Forms\Components\TextInput::make('descricao')

@@ -7,7 +7,9 @@ use App\Filament\Resources\MesResource\RelationManagers;
 use App\Models\Mes;
 use App\Rules\ExisteMes;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -58,8 +60,8 @@ class MesResource extends Resource
                                 Forms\Components\Select::make('do_ano_mes_id')
                                     ->relationship('doAnoMeses', 'nome',
                                         fn(Builder $query) => $query->orderBy('id'))
-                                    //checar se já existe um mes cadastrado com o mesmo ano e nome
                                     ->rules(['required', new ExisteMes])
+                                    ->reactive()
                                     ->label('Nome')
                                     ->columnSpan(1),
                             ])
@@ -81,28 +83,59 @@ class MesResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->label('ANO'),
+
                 TextColumn::make('do_ano_mes_id')
                     ->sortable()
                     ->searchable()
                     ->label('MÊS'),
+
                 TextColumn::make('doAnoMeses.nome')
                     ->label(''),
+
                 TextColumn::make('numero_dias')
                     ->state(function (Model $record) : int {
                         return $record->numeroDias();
-                    })
-                    ->label('DIAS'),
-                TextColumn::make('numero_dias_uteis')
+                        })
+                    ->label('D')
+                    ->tooltip('Nº de dias do mês'),
+
+                TextColumn::make('numero_dias_fdsmn')
                     ->state(function (Model $record) : int {
-                        return $record->numeroDiasUteis();
+                        return $record->numeroDiasFdsmn();
                     })
-                    ->label('ÚTEIS'),
+                    ->label('FS')
+                    ->color('gray')
+                    ->tooltip('Nº de dias de fim de semana'),
+
                 TextColumn::make('$numero_feriados')
                     ->state(function (Model $record) : int {
                         return $record->numeroFeriados();
                     })
-                    ->label('FERIADOS'),
+                    ->label('FE')
+                    ->color('gray')
+                    ->tooltip('Nº de feriados'),
+                TextColumn::make('$numero_feriados_uteis')
+                    ->state(function (Model $record) : int {
+                        return $record->numeroFeriadosUteis();
+                    })
+                    ->label('FU')
+                    ->color('gray')
+                    ->tooltip('Nº de feriados em dias úteis'),
 
+                TextColumn::make('numero_dias_uteis')
+                    ->state(function (Model $record) : int {
+                        return $record->numeroDiasUteis();
+                    })
+                    ->label('DU')
+                    ->tooltip('Nº de dias úteis'),
+
+                TextColumn::make('numero_dias_nao_uteis')
+                    ->state(function (Model $record) : int {
+                        return $record->numeroDiasNaoUteis();
+                    })
+                    ->label('DN')
+                    ->color('primary')
+                    ->tooltip('Nº de dias NÃO úteis'),
             ])
             ->defaultSort(fn (Builder $query) => $query->orderBy('do_ano_mes_id', 'desc'))
             ->filters([
@@ -124,8 +157,15 @@ class MesResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            //TODO: relacionar com Feriado
+
         ];
+    }
+
+    //actions
+    public static function getRecordActions(): void
+    {
+        echo('Executa Ação ao Gravar');
     }
 
     public static function getPages(): array

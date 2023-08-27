@@ -38,9 +38,34 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                //
-            ]);
+                //form fields
+                Forms\Components\TextInput::make('name')
+                    ->autofocus()
+                    ->required()
+                    ->label('Nome'),
+                Forms\Components\TextInput::make('email')
+                    ->email()
+                    ->required()
+                    ->label('Email'),
+                Forms\Components\TextInput::make('password')
+                    ->password()
+                    ->required()
+                    ->label('Senha'),
+                Forms\Components\TextInput::make('password_confirmation')
+                    ->password()
+                    ->required()
+                    ->label('Confirmação de Senha'),
+            ])
+            ->columns(2);
     }
+
+    public static function relations(): array
+    {
+        return [
+            RelationManagers\EfetivoRelationManager::class,
+        ];
+    }
+
 
     public static function table(Table $table): Table
     {
