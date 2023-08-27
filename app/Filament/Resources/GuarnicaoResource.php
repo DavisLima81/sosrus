@@ -51,6 +51,7 @@ class GuarnicaoResource extends Resource
                         Forms\Components\TextInput::make('nome')
                             ->label('Nome')
                             ->required()
+                            ->unique(ignoreRecord: true)
                             ->maxLength(100)
                             ->columnSpan(3),
                         Forms\Components\TextInput::make('descricao')

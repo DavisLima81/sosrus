@@ -17,7 +17,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $numero_dias_uteis
  * @property int $primeiro_dia_semana
  * @property int $numero_feriados
- *
+ * @property int $numero_feriados_uteis
+ * @property int $numero_dias_fdsmn
+ * @property int $numero_dias_nao_uteis
  */
 class Mes extends Model
 {
@@ -56,15 +58,27 @@ class Mes extends Model
         return $numero_feriados;
     }
 
-    //calcular numero de dias uteis do mes
+    public function numeroFeriadosUteis() : int
+    {
+        $numero_feriados_uteis = 0;
+        $feriados = Feriado::where('data', 'like', $this->ano . '%' . $this->do_ano_mes_id . '%')->get();
+        foreach ($feriados as $feriado) {
+            $dia_semana = date('w', strtotime($feriado->data));
+            if ($dia_semana != 0 && $dia_semana != 6) {
+                $numero_feriados_uteis++;
+            }
+        }
+        return $numero_feriados_uteis;
+    }
 
+    //calcular numero de dias uteis do mes
     public function numeroDiasUteis() : int
     {
         $numero_dias = $this->numeroDias();
         $numero_dias_uteis = 0;
         $ano = $this->ano;
         $do_ano_mes_id = $this->do_ano_mes_id;
-        $numero_feriados = $this->numeroFeriados();
+        $numero_feriados_uteis = $this->numeroFeriadosUteis();
 
         for ($i = 1; $i <= $numero_dias; $i++) {
             $dia_semana = date('w', strtotime($ano . '-' . $do_ano_mes_id . '-' . $i));
@@ -72,8 +86,34 @@ class Mes extends Model
                 $numero_dias_uteis++;
             }
         }
-        $numero_dias_uteis = $numero_dias_uteis - $numero_feriados;
+        $numero_dias_uteis = $numero_dias_uteis - $numero_feriados_uteis;
         return $numero_dias_uteis;
+    }
+
+    //calcular numero de dias de fim de semana (sabado e domingo) do mes
+    public function numeroDiasFdsmn() : int
+    {
+        $numero_dias = $this->numeroDias();
+        $numero_dias_fdsmn = 0;
+        $ano = $this->ano;
+        $do_ano_mes_id = $this->do_ano_mes_id;
+
+        for ($i = 1; $i <= $numero_dias; $i++) {
+            $dia_semana = date('w', strtotime($ano . '-' . $do_ano_mes_id . '-' . $i));
+            if ($dia_semana == 0 || $dia_semana == 6) {
+                $numero_dias_fdsmn++;
+            }
+        }
+        return $numero_dias_fdsmn;
+    }
+
+    //calcular numero de dias não uteis
+    public function numeroDiasNaoUteis() : int
+    {
+        $numero_dias_fdsmn = $this->numeroDiasFdsmn();
+        $numero_feriados_uteis = $this->numeroFeriadosUteis();
+        $numero_dias_nao_uteis = $numero_dias_fdsmn + $numero_feriados_uteis;
+        return $numero_dias_nao_uteis;
     }
 
     //calcular primeiro dia da semana do mes

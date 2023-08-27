@@ -45,6 +45,7 @@ class RegimeResource extends Resource
                             ->required()
                             ->length(3)
                             ->rule('size:3')
+                            ->unique(ignoreRecord: true)
                             ->extraInputAttributes(['style' => 'text-transform:uppercase'])
                             ->columnSpan(1),
                         Forms\Components\TextInput::make('nome')
@@ -77,8 +78,6 @@ class RegimeResource extends Resource
             ->columns([
                 //
                 TextColumn::make('sigla')
-                    ->sortable()
-                    ->searchable()
                     ->label('SIGLA')
                     ->sortable('desc')
                     ->searchable(),
