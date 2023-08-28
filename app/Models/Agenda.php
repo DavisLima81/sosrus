@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $localizacao
  * @property int $cor_id
  * @property string $time_zone
+ * @property int $escala_id
 */
 class Agenda extends Model
 {
@@ -20,6 +21,7 @@ class Agenda extends Model
     protected $table = 'agendas';
 
     protected $fillable = [
+        'escala_id',
         'resumo',
         'descricao',
         'localizacao',
@@ -34,6 +36,11 @@ class Agenda extends Model
     public function cor() : BelongsTo
     {
         return $this->belongsTo(Cor::class, 'cor_id', 'id');
+    }
+
+    public function escala() : BelongsTo
+    {
+        return $this->belongsTo(Escala::class, 'escala_id', 'id');
     }
 
     public function timeZone() : string
