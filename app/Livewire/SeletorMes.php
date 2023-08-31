@@ -29,6 +29,12 @@ class SeletorMes extends Component
         }
     }
 
+    //chamar funçao updated meses
+    public function selectedMes(string $selected_mes) : void
+    {
+        dump($selected_mes);
+    }
+
     public function render()
     {
         return view('livewire.seletor-mes', [

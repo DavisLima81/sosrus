@@ -85,6 +85,7 @@
                 }
             </script>
         @endif
+        <link href="https://cdn.jsdelivr.net/npm/daisyui@3.6.2/dist/full.css" rel="stylesheet" type="text/css" />
 
         {{ \Filament\Support\Facades\FilamentView::renderHook('panels::head.end') }}
         @filamentStyles
@@ -121,5 +122,6 @@
         {{ \Filament\Support\Facades\FilamentView::renderHook('panels::body.end') }}
         @filamentScripts
         @vite('resources/js/app.js')
+        <script src="https://cdn.tailwindcss.com"></script>
     </body>
 </html>
