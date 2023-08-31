@@ -9,4 +9,8 @@
         guest
     @endif
 
+    {{--se existir $do_ano_mes_id e $ano exibir calendario --}}
+    <livewire:caledario />
+
+
 </x-filament-panels::page>

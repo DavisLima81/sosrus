@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Escala extends Model
 {
@@ -45,5 +46,10 @@ class Escala extends Model
     public function regime(): BelongsTo
     {
         return $this->belongsTo(Regime::class, 'regime_id');
+    }
+
+    public function agenda() : HasOne
+    {
+        return $this->hasOne(Agenda::class, 'escala_id', 'id');
     }
 }

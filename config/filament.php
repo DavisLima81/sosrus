@@ -37,4 +37,13 @@ return [
 
     'default_filesystem_disk' => env('FILAMENT_FILESYSTEM_DISK', 'public'),
 
+    'sidebar' => [
+        'collapsible' => env('FILAMENT_SIDEBAR_COLLAPSIBLE', true),
+        'collapsed' => env('FILAMENT_SIDEBAR_COLLAPSED', false),
+        'groups' => [
+            'are_collapsible' => env('FILAMENT_SIDEBAR_GROUPS_ARE_COLLAPSIBLE', true),
+            'are_collapsed' => true,
+        ],
+    ],
+
 ];
