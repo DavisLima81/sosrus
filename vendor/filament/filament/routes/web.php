@@ -7,6 +7,10 @@ use Filament\Http\Controllers\RedirectToHomeController;
 use Filament\Http\Controllers\RedirectToTenantController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/teste', function () {
+    return view('front.teste');
+});
+
 Route::name('filament.')
     ->group(function () {
         foreach (Filament::getPanels() as $panel) {

@@ -7,9 +7,18 @@ use Livewire\Component;
 
 /**
  *@property Carbon $mes_teste
+ * @property $mes
  * */
 class Caledario extends Component
 {
+    #[Reactive]
+    public $mes;
+
+    public function mount($mes)
+    {
+        $this->mes = $mes;
+    }
+
     public function MesTeste() : array
     {
         $dt = Carbon::now();
@@ -33,7 +42,7 @@ class Caledario extends Component
     public function render()
     {
         return view('livewire.caledario', [
-            'mes_teste' => $this->MesTeste(),
+            'mes' => $this->mes,
         ]);
     }
 
