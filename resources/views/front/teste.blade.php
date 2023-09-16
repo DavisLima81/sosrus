@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-    @section('content')
+@section('content')
         <livewire:teste />
-    @endsection
+@endsection
 

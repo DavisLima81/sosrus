@@ -56,13 +56,6 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->sidebarCollapsibleOnDesktop()
-            ->navigationItems([
-                NavigationItem::make('Grade')
-                    ->url(env('APP_URL') . '/admin/meses/{}/grade')
-                    ->icon('heroicon-m-table-cells')
-                    ->group('Escalas')
-                    ->sort(11),
-            ])
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
             ]);

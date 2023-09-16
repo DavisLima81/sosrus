@@ -174,7 +174,6 @@ class MesResource extends Resource
             'index' => Pages\ListMes::route('/'),
             'create' => Pages\CreateMes::route('/create'),
             'edit' => Pages\EditMes::route('/{record}/edit'),
-            'grid' => Pages\GridMes::route('/{record?}/grade'),
 
         ];
     }

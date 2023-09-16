@@ -1,8 +1,14 @@
+@if($mes != null && $mes != 'MES_MOUNT_SELETOR')
 <div>
     <div class="grid h-10 flex-grow bg-gray-600 place-items-top justify-center">
-        <span class="py-1"><strong>hahaha - {{ $mes }}</strong></span>
+        <span class="py-1" wire:model.live="mes">No mês - {{ $mes }}</span>
     </div>
-    <h2 class="heading"> lkajsd </h2>
+    <br>
+    <div class="grid grid-cols-1 gap-1">
+
+    </div>
+    <hr class="border-gray-600">
+
     <div class="grid grid-cols-7 gap-1">
         <div class="grid h-10 flex-grow bg-gray-600 place-items-top justify-center">
             <span class="py-1"><strong>SEG</strong></span>
@@ -305,3 +311,4 @@
         </div>
     </div>
 </div>
+@endif()

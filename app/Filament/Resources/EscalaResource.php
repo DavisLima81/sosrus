@@ -29,7 +29,7 @@ class EscalaResource extends Resource
 
     protected static ?string $slug = 'escalas';
 
-    protected static ?string $navigationIcon = 'heroicon-o-calendar';
+    protected static ?string $navigationIcon = 'heroicon-o-map';
 
     protected static ?string $navigationGroup = 'Escalas';
 

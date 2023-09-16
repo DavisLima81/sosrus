@@ -6,10 +6,14 @@ use Filament\Http\Controllers\Auth\LogoutController;
 use Filament\Http\Controllers\RedirectToHomeController;
 use Filament\Http\Controllers\RedirectToTenantController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use \App\Http\Controllers\TesteController;
 
-Route::get('/teste', function () {
-    return view('front.teste');
-});
+
+
+Route::get('/teste', [TesteController::class, 'index'])
+    ->middleware('web')
+    ->name('index');
 
 Route::name('filament.')
     ->group(function () {

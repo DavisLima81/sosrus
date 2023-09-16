@@ -1,28 +1,27 @@
-<form>
+<div>
     {{--<h3><strong>{{$mes}}</strong></h3>--}}
     <div class="inline-grid grid-cols-6 gap-1 form-control">
-        @csrf
         <div>
             <label class="label">
                 <span class="label-text-alt">ANO</span>
             </label>
-            <select wire:model="ano" class="select select-warning">
+            <select wire:model.live="ano" wire:click="" class="select select-warning">
 
                 <label for="ano">ANO</label>
                 <option value="">Ano</option>
                 @if($anos && is_object($anos))
                     @foreach($anos as $ano)
-                        <option wire:key="{{$ano->ano}}">{{$ano->ano}}</option>
+                        <option wire:key="{{$ano}}">{{$ano}}</option>
                     @endforeach
                 @endif
             </select>
         </div>
-        <div>
+        <div class="px-3">
             @if(!is_null($meses))
                 <label class="label">
                     <span class="label-text-alt">MÊS</span>
                 </label>
-                <select wire:model="mes" wire:click="selecionouMes()" class="select select-warning">
+                <select wire:model.live="mes" class="select select-warning">
                     <option value="">Mês</option>
                     @if($meses && is_object($meses))
                         @foreach($meses as $mes)
@@ -34,5 +33,12 @@
             @endif
         </div>
     </div>
-    <livewire:caledario :mes="$mes" />
-</form>
+    <br><br>
+    <div>
+        <button x-on:click="$wire.ano = ''; $wire.mes = '';" class="btn btn-sm btn-neutral">Refresh</button>
+    </div>
+    <br>
+
+</div>
+
+
