@@ -19,6 +19,7 @@ class GuarnicoesSeeder extends Seeder
             ['sigla' => 'AMD', 'nome' => 'Aeromédico', 'Descricao' => 'Equipe de serviço de transporte aeromédico com helicóptero'],
             ['sigla' => 'ATC', 'nome' => 'Auto Tanque de Combustível', 'Descricao' => 'Equipe de serviço de transporte com viatura de combustível para aeronaves'],
             ['sigla' => 'COV', 'nome' => 'Convant', 'Descricao' => 'Equipe de serviço de operações com UAS'],
+            ['sigla' => 'SAD', 'nome' => 'Seção administrativa', 'Descricao' => 'Equipe de expediente na SAD'],
 
         ]);
     }

@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('meses', function (Blueprint $table) {
+        Schema::create('antecedencia_permutas', function (Blueprint $table) {
             $table->id();
-            $table->integer('ano', false, true);
-            $table->unsignedBigInteger('do_ano_mes_id');
+            $table->integer('horas_antecedencia')
+                ->default(24);
             $table->timestamps();
-            //relationships
-            $table->foreign('do_ano_mes_id')->references('id')->on('do_ano_meses');
         });
     }
 
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('meses');
+        Schema::dropIfExists('antecedencia_permutas');
     }
 };

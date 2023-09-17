@@ -107,7 +107,7 @@ class MesResource extends Resource
                     ->color('gray')
                     ->tooltip('Nº de dias de fim de semana'),
 
-                TextColumn::make('$numero_feriados')
+                TextColumn::make('numero_feriados')
                     ->state(function (Model $record) : int {
                         return $record->numeroFeriados();
                     })
@@ -174,7 +174,6 @@ class MesResource extends Resource
             'index' => Pages\ListMes::route('/'),
             'create' => Pages\CreateMes::route('/create'),
             'edit' => Pages\EditMes::route('/{record}/edit'),
-            'grid' => Pages\GridMes::route('/{record?}/grade'),
 
         ];
     }

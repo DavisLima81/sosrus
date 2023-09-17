@@ -90,6 +90,7 @@
         {{ \Filament\Support\Facades\FilamentView::renderHook('panels::head.end') }}
         @filamentStyles
         @vite('resources/css/app.css')
+        @livewireStyles
     </head>
 
     <body
@@ -122,6 +123,7 @@
         {{ \Filament\Support\Facades\FilamentView::renderHook('panels::body.end') }}
         @filamentScripts
         @vite('resources/js/app.js')
+        @livewireScripts
         <script src="https://cdn.tailwindcss.com"></script>
     </body>
 </html>

@@ -1,15 +1,25 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Old;
 
+use App\Livewire\On;
 use Carbon\Carbon;
 use Livewire\Component;
 
 /**
  *@property Carbon $mes_teste
+ * @property $mes
+ * @property $ano
  * */
 class Caledario extends Component
 {
+    public ?string $mes = 'MES_MOUNT_CALENDAR';
+
+    public function mount()
+    {
+        $this->mes = 'MES_MOUNT_CALENDAR';
+    }
+
     public function MesTeste() : array
     {
         $dt = Carbon::now();
@@ -32,10 +42,16 @@ class Caledario extends Component
 
     public function render()
     {
+        $mes = $this->mes;
         return view('livewire.caledario', [
-            'mes_teste' => $this->MesTeste(),
+            'mes' => $mes,
         ]);
     }
 
+    #[On('evento')]
+    public function OnMes()
+    {
+        dd('Retetetete');
+    }
 
 }

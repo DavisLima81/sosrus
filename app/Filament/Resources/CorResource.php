@@ -67,11 +67,11 @@ class CorResource extends Resource
                 TextColumn::make('nome')
                     ->sortable()
                     ->searchable()
-                    ->label('COR'),
+                    ->label('NOME'),
                 ColorColumn::make('hexadecimal')
                     ->sortable()
                     ->searchable()
-                    ->label('COD'),
+                    ->label('AMOSTRA'),
             ])->defaultSort('nome', 'asc')
             ->filters([
                 //

@@ -7,11 +7,13 @@ use App\Filament\Resources\EscalaResource\RelationManagers;
 use App\Models\Escala;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\BooleanColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Support\RawJs;
@@ -29,7 +31,7 @@ class EscalaResource extends Resource
 
     protected static ?string $slug = 'escalas';
 
-    protected static ?string $navigationIcon = 'heroicon-o-calendar';
+    protected static ?string $navigationIcon = 'heroicon-o-map';
 
     protected static ?string $navigationGroup = 'Escalas';
 
@@ -89,6 +91,9 @@ class EscalaResource extends Resource
                                     ->rule('max:2')
                                     ->required()
                                     ->columnSpan(1),
+                                Forms\Components\toggle::make('ativo')
+                                    ->label('Ativo')
+                                    ->columnSpan(1),
                             ])
                             ->columns([
                                 'sm' => 3,
@@ -104,7 +109,7 @@ class EscalaResource extends Resource
         return $table
             ->columns([
                 //
-                TextColumn::make('regime.sigla')
+                TextColumn::make('regime.nome')
                     ->sortable()
                     ->searchable()
                     ->label('REGIME'),
@@ -122,6 +127,10 @@ class EscalaResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->label('DURAÇÃO (h)'),
+                BooleanColumn::make('ativo')
+                    ->sortable()
+                    ->searchable()
+                    ->label('ATIVA'),
             ])
             ->defaultSort('nome')
             ->filters([

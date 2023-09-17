@@ -27,7 +27,7 @@ class EscalaTipoResource extends Resource
 
     protected static ?string $slug = 'escala-tipos';
 
-    protected static ?string $navigationIcon = 'heroicon-s-calendar-days';
+    protected static ?string $navigationIcon = 'heroicon-s-adjustments-horizontal';
 
     protected static ?string $navigationGroup = 'Gerencial';
 

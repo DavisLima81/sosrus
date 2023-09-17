@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('inicio');
             $table->unsignedInteger('duracao');
             $table->unsignedBigInteger('regime_id');
+            $table->boolean('ativo')->default(true);
             $table->timestamps();
             //relacionamentos
             $table->foreign('escala_tipo_id')->references('id')->on('escala_tipos');

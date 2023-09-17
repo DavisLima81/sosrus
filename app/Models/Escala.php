@@ -21,6 +21,7 @@ class Escala extends Model
         'inicio',
         'duracao',
         'regime_id',
+        'ativo',
         'created_at',
         'updated_at',
         'deleted_at',
