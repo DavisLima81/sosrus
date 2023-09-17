@@ -107,7 +107,7 @@ class MesResource extends Resource
                     ->color('gray')
                     ->tooltip('Nº de dias de fim de semana'),
 
-                TextColumn::make('$numero_feriados')
+                TextColumn::make('numero_feriados')
                     ->state(function (Model $record) : int {
                         return $record->numeroFeriados();
                     })

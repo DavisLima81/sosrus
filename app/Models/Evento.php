@@ -22,7 +22,6 @@ class Evento extends Model
         'lembretes',
         'evento_tipo',
         'status',
-        'agenda_id',
         'created',
         'updated',
         'cor_id',

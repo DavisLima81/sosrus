@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('meses', function (Blueprint $table) {
+        Schema::create('escalados', function (Blueprint $table) {
             $table->id();
-            $table->integer('ano', false, true);
-            $table->unsignedBigInteger('do_ano_mes_id');
+            $table->unsignedBigInteger('escala_id');
+            $table->unsignedBigInteger('efetivo_id');
+            $table->date('data');
             $table->timestamps();
-            //relationships
-            $table->foreign('do_ano_mes_id')->references('id')->on('do_ano_meses');
+            //relations
+            $table->foreign('escala_id')->references('id')->on('escalas');
+            $table->foreign('efetivo_id')->references('id')->on('efetivos');
         });
     }
 
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('meses');
+        Schema::dropIfExists('escalados');
     }
 };

@@ -49,7 +49,6 @@ class Mes extends Model
         return $numero_dias;
     }
 
-    //TODO: providenciar lógica para conferir se feriado é dia útil
     //calcular numero de feriados
     public function numeroFeriados() : int
     {
@@ -58,6 +57,7 @@ class Mes extends Model
         return $numero_feriados;
     }
 
+    //calcular numero de feriados em dias que seriam uteis
     public function numeroFeriadosUteis() : int
     {
         $numero_feriados_uteis = 0;
