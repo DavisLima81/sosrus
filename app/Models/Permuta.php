@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use App\Models\AntecedenciaPermuta;
 
@@ -24,24 +25,24 @@ class Permuta extends Model
         'updated_at',
     ];
 
-    public function escala() : HasOne
+    public function escala() : BelongsTo
     {
-        return $this->hasOne(Escala::class, 'escala_id');
+        return $this->belongsTo(Escala::class, 'escala_id');
     }
 
-    public function entra_efetivo() : HasOne
+    public function entra_efetivo() : BelongsTo
     {
-        return $this->hasOne(Efetivo::class, 'entra_efetivo_id');
+        return $this->belongsTo(Efetivo::class, 'entra_efetivo_id');
     }
 
-    public function sai_efetivo() : HasOne
+    public function sai_efetivo() : BelongsTo
     {
-        return $this->hasOne(Efetivo::class, 'sai_efetivo_id');
+        return $this->belongsTo(Efetivo::class, 'sai_efetivo_id');
     }
 
-    public function autorizador() : HasOne
+    public function autorizador() : BelongsTo
     {
-        return $this->hasOne(Efetivo::class, 'autorizador_id');
+        return $this->belongsTo(Efetivo::class, 'autorizador_id');
     }
 
     //verifica se a permuta está dentro do prazo determinado por AntecedenciaPermuta

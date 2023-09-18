@@ -40,7 +40,6 @@ class EfetivoResource extends Resource
     //region FORM
     public static function form(Form $form): Form
     {
-
         return $form
             ->schema([
                 //criar campos
