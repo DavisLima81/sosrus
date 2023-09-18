@@ -93,6 +93,8 @@ class EscalaResource extends Resource
                                     ->columnSpan(1),
                                 Forms\Components\toggle::make('ativo')
                                     ->label('Ativo')
+                                    ->default(true)
+                                    ->extraAttributes(['class' => 'toggle toggle-error'])
                                     ->columnSpan(1),
                             ])
                             ->columns([

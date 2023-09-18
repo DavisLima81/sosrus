@@ -17,8 +17,8 @@ return new class extends Migration
             $table->date('data');
             $table->unsignedBigInteger('entra_efetivo_id');
             $table->unsignedBigInteger('sai_efetivo_id');
-            $table->boolean('no_prazo');
-            $table->unsignedBigInteger('autorizador_id');
+            $table->boolean('no_prazo')->nullable();
+            $table->unsignedBigInteger('autorizador_id')->nullable();
             $table->timestamps();
             //relationships
             $table->foreign('escala_id')->references('id')->on('escalas');

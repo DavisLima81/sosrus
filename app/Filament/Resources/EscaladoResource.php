@@ -86,42 +86,42 @@ class EscaladoResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                //
-                ViewColumn::make('escala_id')
-                    ->view('tables.columns.escalado-escala-guarnicao')
-                    ->sortable()
-                    ->searchable()
-                    ->tooltip('Não usar pesquisa, usar filtro')
-                    ->label('GUARNIÇÃO - ESCALA'),
+                    ->columns([
+                        //
+                        ViewColumn::make('escala_id')
+                            ->view('tables.columns.escalado-escala-guarnicao')
+                            ->sortable()
+                            ->searchable()
+                            ->tooltip('Não usar pesquisa, usar filtro')
+                            ->label('GUARNIÇÃO - ESCALA'),
 
-                TextColumn::make('data')
-                    ->date('d/m/Y')
-                    ->sortable()
-                    ->searchable()
-                    ->label('DATA'),
+                        TextColumn::make('data')
+                            ->date('d/m/Y')
+                            ->sortable()
+                            ->searchable()
+                            ->label('DATA'),
 
-                TextColumn::make('efetivo.trigrama')
-                    ->sortable()
-                    ->searchable()
-                    ->label('TRIG'),
+                        TextColumn::make('efetivo.trigrama')
+                            ->sortable()
+                            ->searchable()
+                            ->label('TRIG'),
 
-                TextColumn::make('tem_permuta')
-                    ->state(function (Model $record) : string {
-                        if ($record->temPermuta() == 1)
-                            return 'SIM';
-                        else
-                            return 'NÃO';
-                    })
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'SIM' => 'warning',
-                        'NÃO' => 'gray',
-                    })
-                    ->sortable()
-                    ->label('PERMUTA'),
+                        TextColumn::make('tem_permuta')
+                            ->state(function (Model $record) : string {
+                                if ($record->temPermuta() == 1)
+                                    return 'SIM';
+                                else
+                                    return 'NÃO';
+                            })
+                            ->badge()
+                            ->color(fn (string $state): string => match ($state) {
+                                'SIM' => 'warning',
+                                'NÃO' => 'gray',
+                            })
+                            ->sortable()
+                            ->label('PERMUTA'),
 
-            ])
+                    ])
             ->defaultSort('data', 'asc')
             ->filters([
                 SelectFilter::make('escala_id')
@@ -134,6 +134,7 @@ class EscaladoResource extends Resource
                         }
                         return $escala_show;
                     })
+                    ->multiple()
                     ->label('ESCALA'),
 
             ])
