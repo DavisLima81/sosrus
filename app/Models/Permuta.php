@@ -10,6 +10,11 @@ use App\Models\AntecedenciaPermuta;
 
 class Permuta extends Model
 {
+    /*
+     * @propertyRead string $entra_efetivo_trigrama
+     * @propertyRead string $sai_efetivo_trigrama
+     * */
+
     use HasFactory;
 
     protected $table = 'permutas';
@@ -66,5 +71,17 @@ class Permuta extends Model
             ->where('efetivo_id', $sai_efetivo_id)
             ->first();
         return $escalado != null;
+    }
+
+    public function saiEfetivoTrigrama() : string
+    {
+        $sai_efetivo = Efetivo::find($this->sai_efetivo_id);
+        return $sai_efetivo->trigrama;
+    }
+
+    public function entraEfetivoTrigrama() : string
+    {
+        $entra_efetivo = Efetivo::find($this->entra_efetivo_id);
+        return $entra_efetivo->trigrama;
     }
 }

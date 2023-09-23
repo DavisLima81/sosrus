@@ -70,6 +70,11 @@ class Efetivo extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getTrigrama() : string {
+        return $this->trigrama;
+    }
+
     //endregion
 
     //region SETTERS
