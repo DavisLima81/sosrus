@@ -105,7 +105,8 @@ class PermutaResource extends Resource
                                     //TODO: retirar 'entra_efetivo_id' da lista de opções
                                     ->numeric()
                                     ->live()
-                                    ->readOnly()
+                                    //->readOnly()
+                                    ->hidden()
                                     ->required()
                                     ->rules([
                                         'required',
@@ -124,7 +125,15 @@ class PermutaResource extends Resource
                                     ])
                                     ->columnSpan(1),
                                 Forms\Components\Select::make('entra_efetivo_id')
-                                    ->relationship('entra_efetivo', 'trigrama')
+                                    ->options(function (callable $get) {
+                                        $sai_efetivo_id = $get('sai_efetivo_id');
+                                        if ($sai_efetivo_id == null) {
+                                            return Efetivo::all()->pluck('trigrama', 'id');
+                                        } else {
+                                            $a[0] = $sai_efetivo_id;
+                                            return Efetivo::whereNotIn('id', $a)->pluck('trigrama', 'id');
+                                        }
+                                    })
                                     ->label('Entra')
                                     ->reactive()
                                     ->required()

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,6 +10,12 @@ use Illuminate\Support\Collection;
 
 class Escalado extends Model
 {
+    /*
+     * @propertyRead string $efetivo_trig
+     * @propertyRead array $get_permutas
+     *
+    */
+
     use HasFactory;
 
     protected $table = 'escalados';
@@ -21,6 +28,12 @@ class Escalado extends Model
         'updated_at',
     ];
 
+    public function getEscaladoDia() {
+        $escalado_dia = new Carbon($this->data);
+        return $escalado_dia->format('d/m/Y');
+    }
+
+
     public function escala() : BelongsTo
     {
         return $this->belongsTo(Escala::class, 'escala_id');
@@ -32,12 +45,25 @@ class Escalado extends Model
     }
 
     //verifica se existem permutas para este Escalado
-    public function permuta() : Collection
+    public function getPermutas() : Collection
     {
-        $permuta = Permuta::where('sai_efetivo_id', $this->efetivo_id)
+        $get_permutas = Permuta::where('sai_efetivo_id', $this->efetivo_id)
             ->where('data', $this->data)
             ->get();
-        return $permuta;
+        return $get_permutas;
+    }
+
+    public function permuta() : Collection
+    {
+        $permutas = Permuta::where('sai_efetivo_id', $this->efetivo_id)
+            ->where('data', $this->data)
+            ->get();
+        return $permutas;
+    }
+
+    public function getEfetivoTrig() : string
+    {
+        return $this->efetivo->trigrama;
     }
 
     //verifica se existe permuta
@@ -58,6 +84,15 @@ class Escalado extends Model
             return $this->permuta()->last()->entra_efetivo->trigrama;
         }
         return 'N/A';
+    }
+
+    public function efetivo_trig() : string
+    {
+        if($this->temPermuta())
+        {
+            return $this->getTrigramaPermuta();
+        }
+        return $this->efetivo->trigrama;
     }
 }
 

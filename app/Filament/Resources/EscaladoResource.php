@@ -101,9 +101,11 @@ class EscaladoResource extends Resource
                             ->searchable()
                             ->label('DATA'),
 
-                        TextColumn::make('efetivo.trigrama')
+                        TextColumn::make('efetivo_trig()')
+                            ->default(function (Model $record) : string {
+                                return $record->efetivo_trig();
+                            })
                             ->sortable()
-                            ->searchable()
                             ->label('TRIG'),
 
                         TextColumn::make('tem_permuta')
@@ -140,6 +142,7 @@ class EscaladoResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 /*Tables\Actions\BulkActionGroup::make([
@@ -164,6 +167,7 @@ class EscaladoResource extends Resource
             'index' => Pages\ListEscalados::route('/'),
             'create' => Pages\CreateEscalado::route('/create'),
             'edit' => Pages\EditEscalado::route('/{record}/edit'),
+            'view' => Pages\ViewEscalado::route('/{record}'),
         ];
     }
 }
