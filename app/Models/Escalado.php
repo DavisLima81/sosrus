@@ -11,8 +11,11 @@ use Illuminate\Support\Collection;
 class Escalado extends Model
 {
     /*
+     * @property protected $table
+     * @property protected $fillable
      * @propertyRead string $efetivo_trig
      * @propertyRead array $get_permutas
+     *
      *
     */
 
@@ -47,18 +50,10 @@ class Escalado extends Model
     //verifica se existem permutas para este Escalado
     public function getPermutas() : Collection
     {
-        $get_permutas = Permuta::where('sai_efetivo_id', $this->efetivo_id)
+        $get_permutas = Permuta::where('escala_id', $this->escala_id)
             ->where('data', $this->data)
             ->get();
         return $get_permutas;
-    }
-
-    public function permuta() : Collection
-    {
-        $permutas = Permuta::where('sai_efetivo_id', $this->efetivo_id)
-            ->where('data', $this->data)
-            ->get();
-        return $permutas;
     }
 
     public function getEfetivoTrig() : string
@@ -69,7 +64,7 @@ class Escalado extends Model
     //verifica se existe permuta
     public function temPermuta() : bool
     {
-        if ($this->permuta()->count() > 0) {
+        if ($this->getPermutas()->count() > 0) {
             $tem_permuta = true;
             return $tem_permuta;
         }
@@ -81,7 +76,7 @@ class Escalado extends Model
     public function getTrigramaPermuta() : string
     {
         if ($this->temPermuta()) {
-            return $this->permuta()->last()->entra_efetivo->trigrama;
+            return $this->getPermutas()->last()->entra_efetivo->trigrama;
         }
         return 'N/A';
     }

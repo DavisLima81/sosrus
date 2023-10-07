@@ -44,14 +44,6 @@ class PermutaResource extends Resource
 
     public static function form(Form $form): Form
     {
-        /*
-         * '',
-        '',
-        '',
-        'sai_efetivo_id',
-        'no_prazo',
-        'autorizador_id',
-        */
         return $form
             ->schema([
                 //criar campos
@@ -87,7 +79,15 @@ class PermutaResource extends Resource
                                         $escalado = Escalado::where('escala_id', $get('escala_id'))
                                             ->where('data', $get('data'))
                                             ->first();
-                                        if ($escalado) {
+                                        $permuta = Permuta::where('escala_id', $get('escala_id'))
+                                            ->where('data', $get('data'))
+                                            ->latest()
+                                            ->first();
+                                        if ($permuta) {
+                                            $sai_efetivo = Efetivo::where('id', $permuta->entra_efetivo_id)->first();
+                                            $set('sai_efetivo_id', $sai_efetivo->id);
+                                            $set('sai_efetivo_trigrama', $sai_efetivo->trigrama);
+                                        } else if ($escalado) {
                                             $sai_efetivo = Efetivo::where('id', $escalado->efetivo_id)->first();
                                             $set('sai_efetivo_id', $sai_efetivo->id);
                                             $set('sai_efetivo_trigrama', $sai_efetivo->trigrama);
@@ -98,21 +98,6 @@ class PermutaResource extends Resource
                                     })
                                     ->live()
                                     ->required()
-                                    ->columnSpan(1),
-                                Forms\Components\TextInput::make('sai_efetivo_id')
-                                    //->relationship('sai_efetivo', 'trigrama')
-                                    ->label('Sai')
-                                    //TODO: retirar 'entra_efetivo_id' da lista de opções
-                                    ->numeric()
-                                    ->live()
-                                    //->readOnly()
-                                    ->hidden()
-                                    ->required()
-                                    ->rules([
-                                        'required',
-                                        'numeric',
-                                        new NaoVazio(),
-                                    ])
                                     ->columnSpan(1),
                                 Forms\Components\TextInput::make('sai_efetivo_trigrama')
                                     ->label('Sai')
@@ -156,6 +141,15 @@ class PermutaResource extends Resource
                                             return false;
                                     })
                                     ->columnSpan(1),
+                                Forms\Components\Hidden::make('sai_efetivo_id')
+                                    //->relationship('sai_efetivo', 'trigrama')
+                                    ->live()
+                                    ->required()
+                                    ->rules([
+                                        'required',
+                                        new NaoVazio(),
+                                    ])
+                                    ->columnSpan(-1),
 
                                 /////////////////////////////
 
