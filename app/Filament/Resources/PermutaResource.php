@@ -79,7 +79,15 @@ class PermutaResource extends Resource
                                         $escalado = Escalado::where('escala_id', $get('escala_id'))
                                             ->where('data', $get('data'))
                                             ->first();
-                                        if ($escalado) {
+                                        $permuta = Permuta::where('escala_id', $get('escala_id'))
+                                            ->where('data', $get('data'))
+                                            ->latest()
+                                            ->first();
+                                        if ($permuta) {
+                                            $sai_efetivo = Efetivo::where('id', $permuta->entra_efetivo_id)->first();
+                                            $set('sai_efetivo_id', $sai_efetivo->id);
+                                            $set('sai_efetivo_trigrama', $sai_efetivo->trigrama);
+                                        } else if ($escalado) {
                                             $sai_efetivo = Efetivo::where('id', $escalado->efetivo_id)->first();
                                             $set('sai_efetivo_id', $sai_efetivo->id);
                                             $set('sai_efetivo_trigrama', $sai_efetivo->trigrama);

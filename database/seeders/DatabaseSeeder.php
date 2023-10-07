@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             EscalasSeeder::class,
             CoresSeeder::class,
             AntecedenciaPermutasSeeder::class,
+            PermutaPrazosSeeder::class,
         ]);
     }
 }

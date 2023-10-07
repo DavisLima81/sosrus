@@ -22,9 +22,9 @@ class PermutaPrazoResource extends Resource
     //region RESOURCE CONFIGURATION
     protected static ?string $model = PermutaPrazo::class;
 
-    protected static ?string $label = 'Prazo de Permuta';
+    protected static ?string $label = 'Prazo Permuta';
 
-    protected static ?string $pluralLabel = 'Prazos de Permuta';
+    protected static ?string $pluralLabel = 'Prazo Permuta';
 
     protected static ?int $navigationSort = 16;
 
