@@ -44,14 +44,6 @@ class PermutaResource extends Resource
 
     public static function form(Form $form): Form
     {
-        /*
-         * '',
-        '',
-        '',
-        'sai_efetivo_id',
-        'no_prazo',
-        'autorizador_id',
-        */
         return $form
             ->schema([
                 //criar campos
@@ -99,21 +91,6 @@ class PermutaResource extends Resource
                                     ->live()
                                     ->required()
                                     ->columnSpan(1),
-                                Forms\Components\TextInput::make('sai_efetivo_id')
-                                    //->relationship('sai_efetivo', 'trigrama')
-                                    ->label('Sai')
-                                    //TODO: retirar 'entra_efetivo_id' da lista de opções
-                                    ->numeric()
-                                    ->live()
-                                    //->readOnly()
-                                    ->hidden()
-                                    ->required()
-                                    ->rules([
-                                        'required',
-                                        'numeric',
-                                        new NaoVazio(),
-                                    ])
-                                    ->columnSpan(1),
                                 Forms\Components\TextInput::make('sai_efetivo_trigrama')
                                     ->label('Sai')
                                     ->helperText('N/C: não consta')
@@ -156,6 +133,15 @@ class PermutaResource extends Resource
                                             return false;
                                     })
                                     ->columnSpan(1),
+                                Forms\Components\Hidden::make('sai_efetivo_id')
+                                    //->relationship('sai_efetivo', 'trigrama')
+                                    ->live()
+                                    ->required()
+                                    ->rules([
+                                        'required',
+                                        new NaoVazio(),
+                                    ])
+                                    ->columnSpan(-1),
 
                                 /////////////////////////////
 

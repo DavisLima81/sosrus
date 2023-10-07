@@ -9,4 +9,10 @@ use Filament\Resources\Pages\CreateRecord;
 class CreatePermuta extends CreateRecord
 {
     protected static string $resource = PermutaResource::class;
+
+    //Redirect to index after create
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

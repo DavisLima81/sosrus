@@ -6,6 +6,7 @@ use App\Filament\Resources\EscaladoResource\Pages;
 use App\Filament\Resources\EscaladoResource\RelationManagers;
 use App\Models\Escala;
 use App\Models\Escalado;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -138,6 +139,17 @@ class EscaladoResource extends Resource
                     })
                     ->multiple()
                     ->label('ESCALA'),
+                SelectFilter::make('data')
+                    ->options(function () {
+                        $data = [];
+                        $escalado = Escalado::all();
+                        foreach ($escalado as $escalado) {
+                                $data[$escalado->data] = Carbon::parse($escalado->data)->format('d/m/Y');
+                        }
+                        return array_unique($data);
+                    })
+                    ->multiple()
+                    ->label('DATA'),
 
             ])
             ->actions([

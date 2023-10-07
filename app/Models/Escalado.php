@@ -11,8 +11,11 @@ use Illuminate\Support\Collection;
 class Escalado extends Model
 {
     /*
+     * @property protected $table
+     * @property protected $fillable
      * @propertyRead string $efetivo_trig
      * @propertyRead array $get_permutas
+     *
      *
     */
 
