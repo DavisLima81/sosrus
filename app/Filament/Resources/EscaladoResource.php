@@ -13,7 +13,9 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\ViewColumn;
 use Illuminate\Database\Eloquent\Builder;
@@ -106,7 +108,6 @@ class EscaladoResource extends Resource
                             ->default(function (Model $record) : string {
                                 return $record->efetivo_trig();
                             })
-                            ->sortable()
                             ->label('TRIG'),
 
                         TextColumn::make('tem_permuta')
@@ -121,7 +122,6 @@ class EscaladoResource extends Resource
                                 'SIM' => 'warning',
                                 'NÃO' => 'gray',
                             })
-                            ->sortable()
                             ->label('PERMUTA'),
 
                     ])
@@ -150,8 +150,8 @@ class EscaladoResource extends Resource
                     })
                     ->multiple()
                     ->label('DATA'),
-
             ])
+
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make(),

@@ -11,4 +11,10 @@ use Spatie\GoogleCalendar\GoogleCalendar as Gcalendar;
 class EscalaCalendario extends Model
 {
     use HasFactory;
+
+    protected $table = 'escala_calendarios';
+
+    protected $fillable = [
+        'escala_id',
+    ];
 }

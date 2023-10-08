@@ -15,11 +15,13 @@ class Escalado extends Model
      * @property protected $fillable
      * @propertyRead string $efetivo_trig
      * @propertyRead array $get_permutas
-     *
+     * @propertyRead boolean $tem_permuta
      *
     */
 
     use HasFactory;
+
+    public $tem_permuta = false;
 
     protected $table = 'escalados';
 
@@ -65,11 +67,11 @@ class Escalado extends Model
     public function temPermuta() : bool
     {
         if ($this->getPermutas()->count() > 0) {
-            $tem_permuta = true;
-            return $tem_permuta;
+            $this->tem_permuta = true;
+            return $this->tem_permuta;
         }
-        $tem_permuta = false;
-        return $tem_permuta;
+        $this->tem_permuta = false;
+        return $this->tem_permuta;
     }
 
     //se ohuver permuta, retorna o trigrama do efetivo da última permuta
