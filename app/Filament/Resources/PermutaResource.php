@@ -8,6 +8,7 @@ use App\Models\Efetivo;
 use App\Models\Escala;
 use App\Models\Escalado;
 use App\Models\Permuta;
+use App\Models\PermutaPrazo;
 use App\Rules\NaoConsta;
 use App\Rules\NaoVazio;
 use Filament\Forms;
@@ -21,6 +22,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Carbon;
 
 class PermutaResource extends Resource
 {
@@ -76,6 +78,7 @@ class PermutaResource extends Resource
                                     ->label('Data')
                                     ->displayFormat('d/m/Y')
                                     ->afterStateUpdated(function (callable $set, callable $get) {
+                                        //region SET TRIGRAMA
                                         $escalado = Escalado::where('escala_id', $get('escala_id'))
                                             ->where('data', $get('data'))
                                             ->first();
@@ -95,6 +98,19 @@ class PermutaResource extends Resource
                                             $set('sai_efetivo_id', '');
                                             $set('sai_efetivo_trigrama', 'N/C');
                                         }
+                                        //// endregion
+                                        //// region SET NO_PRAZO
+                                        $data = $get('data');
+                                        $prazo = PermutaPrazo::all()->first()->horas_antecedencia;
+                                        $data = Carbon::createFromFormat('Y-m-d', $data);
+                                        $data = $data->subHour($prazo);
+                                        $hoje = Carbon::now();
+                                        if ($data->greaterThanOrEqualTo($hoje)) {
+                                            $set('no_prazo', true);
+                                        } else {
+                                            $set('no_prazo', false);
+                                        }
+                                        //// endregion
                                     })
                                     ->live()
                                     ->required()
@@ -128,7 +144,8 @@ class PermutaResource extends Resource
                                     ->label('Prazo')
                                     ->helperText('Avalia se está no prazo')
                                     ->extraAttributes(['class' => 'toggle toggle-error'])
-                                    ->default(true)
+                                    ->default(false)
+                                    ->live()
                                     ->columnSpan(1),
                                 Forms\Components\Select::make('autorizador_id')
                                     ->relationship('autorizador', 'trigrama')
