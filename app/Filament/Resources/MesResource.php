@@ -143,6 +143,7 @@ class MesResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -174,6 +175,7 @@ class MesResource extends Resource
             'index' => Pages\ListMes::route('/'),
             'create' => Pages\CreateMes::route('/create'),
             'edit' => Pages\EditMes::route('/{record}/edit'),
+            'view' => Pages\ViewMes::route('/{record}'),
 
         ];
     }
