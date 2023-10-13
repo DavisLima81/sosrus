@@ -37,13 +37,18 @@
                 <hr>
                 <p class="py-3 text-primary-600">DADOS DO REGISTRO MÊS</p>
                 <p>trazer os feriados e finais de semana</p>
+                @foreach($feriados as $feriado)
+                    <p>{{ $feriado->data }} - {{ $feriado->nome }}</p>
+                @endforeach
+
+
 
                 <br>
                 <br>
             </div>
             <hr class="border-gray-600">
-
-            <div class="grid grid-cols-7 gap-1">
+            {{-- region CABEÇALHO COM OS NOMES DE DIAS DA SEMANA --}}
+            <div class="grid grid-cols-7 gap-1 py-1">
                 <div class="grid h-10 flex-grow bg-gray-600 place-items-top justify-center">
                     <span class="py-1"><strong>SEG</strong></span>
                 </div>
@@ -66,6 +71,8 @@
                     <span class="py-1 text-primary-400"><strong>DOM</strong></span>
                 </div>
             </div>
+            {{-- endregion CABEÇALHO COM OS NOMES DE DIAS DA SEMANA --}}
+            {{-- region DIAS DO MÊS SEMANA #1 --}}
             <div class="grid grid-cols-7 gap-1">
                 <div class="h-40 overflow-y-auto bg-base-100 place-items-top border-b border-gray-600 border-gray-600 px-2">
                     <p class="justify-self-center"><strong>01</strong></p>
@@ -130,8 +137,8 @@
                     <a href="#" class="text-blue-400 badge py-0 my-1 hover:bg-gray-100">ATC</a>
                     <a href="#" class="text-blue-400 badge py-0 my-1 hover:bg-gray-100">COV</a>
                 </div>
-            </div>
-            <div class="grid grid-cols-7 gap-1">
+            {{-- endregion DIAS DO MÊS SEMANA #1 --}}
+            {{-- region DIAS DO MÊS SEMANA #2 --}}
                 <div class="h-40 overflow-y-auto bg-base-100 place-items-top border-b border-gray-600 px-2">
                     <p class="self-auto"><strong>08</strong></p>
                     <a href="#" class="text-blue-400 badge py-0 my-1 hover:bg-gray-100">SBJR</a>
@@ -195,8 +202,8 @@
                     <a href="#" class="text-blue-400 badge py-0 my-1 hover:bg-gray-100">ATC</a>
                     <a href="#" class="text-blue-400 badge py-0 my-1 hover:bg-gray-100">COV</a>
                 </div>
-            </div>
-            <div class="grid grid-cols-7 gap-1">
+            {{-- endregion DIAS DO MÊS SEMANA #2 --}}
+            {{-- region DIAS DO MÊS SEMANA #3 --}}
                 <div class="h-40 overflow-y-auto bg-base-100 place-items-top border-b border-gray-600 px-2">
                     <p class="justify-self-center"><strong>15</strong></p>
                     <a href="#" class="text-blue-400 badge py-0 my-1 hover:bg-gray-100">SBJR</a>
@@ -260,8 +267,8 @@
                     <a href="#" class="text-blue-400 badge py-0 my-1 hover:bg-gray-100">ATC</a>
                     <a href="#" class="text-blue-400 badge py-0 my-1 hover:bg-gray-100">COV</a>
                 </div>
-            </div>
-            <div class="grid grid-cols-7 gap-1">
+            {{-- endregion DIAS DO MÊS SEMANA #3 --}}
+            {{-- region DIAS DO MÊS SEMANA #4 --}}
                 <div class="h-40 overflow-y-auto bg-base-100 place-items-top border-b border-gray-600 px-2">
                     <p class="justify-self-center"><strong>22</strong></p>
                     <a href="#" class="text-blue-400 badge py-0 my-1 hover:bg-gray-100">SBJR</a>
@@ -325,6 +332,8 @@
                     <a href="#" class="text-blue-400 badge py-0 my-1 hover:bg-gray-100">ATC</a>
                     <a href="#" class="text-blue-400 badge py-0 my-1 hover:bg-gray-100">COV</a>
                 </div>
+                {{-- endregion DIAS DO MÊS SEMANA #4 --}}
+                {{-- region DIAS DO MÊS SEMANA #5 --}}
                 <div class="h-40 overflow-y-auto bg-base-100 place-items-top border-b border-gray-600 px-2">
                     <p class="self-auto"><strong>29</strong></p>
                     <a href="#" class="text-blue-400 badge py-0 my-1 hover:bg-gray-100">SBJR</a>
@@ -343,6 +352,7 @@
                     <a href="#" class="text-blue-400 badge py-0 my-1 hover:bg-gray-100">ATC</a>
                     <a href="#" class="text-blue-400 badge py-0 my-1 hover:bg-gray-100">COV</a>
                 </div>
+                {{-- endregion DIAS DO MÊS SEMANA #5 --}}
             </div>
         </div>
     @endif()

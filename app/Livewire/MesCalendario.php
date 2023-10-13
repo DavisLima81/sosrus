@@ -2,8 +2,10 @@
 
 namespace App\Livewire;
 
+use App\Models\Feriado;
 use App\Models\Mes;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Request;
 use Livewire\Component;
 
@@ -27,6 +29,13 @@ class MesCalendario extends Component
         return $this->mes = $mes;
     }
 
+    public function getDoAnoMes(): Mes
+    {
+        $request = Request::route()->parameters();
+        $do_ano_mes = Mes::find($request['record']);
+        return $this->do_ano_mes = $do_ano_mes;
+    }
+
     public function getMesNome(): string
     {
         $mes = $this->mes;
@@ -35,10 +44,12 @@ class MesCalendario extends Component
         return $this->mes_nome = $mes_nome;
     }
 
-    public function getFeriados(): array
+    public function getFeriados(): Builder
     {
         $mes = $this->mes;
-        $feriados = $mes->holidays();
+        $ano = $mes->year;
+        $mes = $mes->month;
+        $feriados = Feriado::where('data', 'like', $ano . '%' . $mes . '%');
         return $feriados;
     }
 
@@ -73,20 +84,40 @@ class MesCalendario extends Component
 
     public function render()
     {
+        $numero_dias = $this->getDoAnoMes()->numeroDias();
         $mes_nome = $this->getMesNome();
         $mes_primeiro_dia = $this->getMes()->startOfMonth();
         $mes_primeiro_dia_semana = $this->getMes()->startOfMonth()->dayOfWeek;
         $mes_primeiro_dia_semana_nome = $this->nomeDiaSemana($this->getMes()->startOfMonth()->dayOfWeek);
-
         $mes_ultimo_dia = $this->getMes()->endOfMonth();
+        $feriados = $this->getFeriados()->get();
+        $cell[] = null;
 
+        //criar um stdClass para cada dia do mes a partir do loop ate o ultimo dia do mes
+        /*
+        for($i = 0; $i <= $numero_dias; $i++){
+            $cell[$i] = new \stdClass();
+            $cell[$i]->dia = $i;
+            $cell[$i]->dia_semana = $this->nomeDiaSemana($this->getMes()->startOfMonth()->dayOfWeek);
+            $cell[$i]->feriado = false;
+            $cell[$i]->feriado_nome = null;
+            $cell[$i]->feriado_id = null;
+            $cell[$i]->feriado_data = null;
+            $cell[$i]->feriado_dia = null;
+            $cell[$i]->feriado_mes = null;
+            $cell[$i]->feriado_ano = null;
+            $cell[$i]->feriado_dia_semana;
+        }
+        */
         return view('livewire.mes-calendario',
             compact(
             'mes_nome',
             'mes_primeiro_dia',
             'mes_primeiro_dia_semana',
             'mes_primeiro_dia_semana_nome',
-            'mes_ultimo_dia'
+            'mes_ultimo_dia',
+            'feriados'
+
             ));
     }
 
