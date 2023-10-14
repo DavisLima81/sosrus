@@ -38,7 +38,7 @@ class MesCalendario extends Component
 
     public function getMesNome(): string
     {
-        $mes = $this->mes;
+        $mes = $this->getMes();
         $mes_nome = $mes->locale('pt_BR')->monthName;
         $mes_nome = mb_strtoupper($mes_nome);
         return $this->mes_nome = $mes_nome;
@@ -46,10 +46,12 @@ class MesCalendario extends Component
 
     public function getFeriados(): Builder
     {
-        $mes = $this->mes;
+        $mes = $this->getMes();
         $ano = $mes->year;
         $mes = $mes->month;
-        $feriados = Feriado::where('data', 'like', $ano . '%' . $mes . '%');
+        //pegar os feriados onde a string data corresponde com o mes e ano
+        $feriados = Feriado::where('data', 'like', $ano . '-' . $mes . '%');
+
         return $feriados;
     }
 
@@ -82,6 +84,59 @@ class MesCalendario extends Component
             return 'Dia da semana não encontrado';
     }
 
+    public function getCelulasCalendario(): array
+    {
+        $numero_dias = $this->getDoAnoMes()->numeroDias();
+        $mes_primeiro_dia_semana = $this->getMes()->startOfMonth()->dayOfWeek;
+        $feriados =  $this->getFeriados()->get();
+        $apoio = $numero_dias + $mes_primeiro_dia_semana;
+        $cell[] = null;
+        //dd($apoio, $mes_primeiro_dia_semana, $numero_dias);
+
+        if($apoio != $numero_dias){
+            for($i = 0; $i <= $apoio; $i++){
+                if ($i < $mes_primeiro_dia_semana) {
+                    $cell[$i] = '--';
+                }
+                elseif ($i >= $mes_primeiro_dia_semana && $i <= $numero_dias + 1) {
+                    $cell[$i - 1] = $i - $mes_primeiro_dia_semana + 1;
+                }
+                elseif ($i > $numero_dias - 1) {
+                    $cell[$i - 2] = $i - $mes_primeiro_dia_semana;
+                }
+            }
+            if ($feriados->count() > 0) {
+                foreach ($feriados as $feriado) {
+                    $dia_feriado = substr($feriado->data, -2);
+                    $ref_cell = $dia_feriado + $mes_primeiro_dia_semana - 2;
+                    $cell[$ref_cell] = array([$cell[$ref_cell], $feriado->nome]);
+                }
+            }
+        } else {
+            for($i = -5; $i <= $apoio + 1; $i++){
+                if ($i <= 1) {
+                    $cell[$i] = '--';
+                }
+                elseif ($i > 0 && $i <= $numero_dias) {
+                    $cell[$i - 1] = $i - 1;
+                }
+                elseif ($i >= $apoio) {
+                    $cell[$i] = $i - 1;
+                }
+            }
+            if ($feriados->count() > 0) {
+                foreach ($feriados as $feriado) {
+                    $dia_feriado = substr($feriado->data, -2);
+                    $ref_cell = $dia_feriado + $mes_primeiro_dia_semana;
+                    $cell[$ref_cell] = array([$cell[$ref_cell], $feriado->nome]);
+                }
+            }
+        }
+        //dd($cell);
+        return $cell;
+    }
+
+    //TODO: AJUSTAR A FUNÇÃO RENDER PARA ENCAMINHAR OS DADOS ADEQUADOS PRA GERAR O CALENÁRIO
     public function render()
     {
         $numero_dias = $this->getDoAnoMes()->numeroDias();
@@ -91,24 +146,8 @@ class MesCalendario extends Component
         $mes_primeiro_dia_semana_nome = $this->nomeDiaSemana($this->getMes()->startOfMonth()->dayOfWeek);
         $mes_ultimo_dia = $this->getMes()->endOfMonth();
         $feriados = $this->getFeriados()->get();
-        $cell[] = null;
+        $cell = $this->getCelulasCalendario();
 
-        //criar um stdClass para cada dia do mes a partir do loop ate o ultimo dia do mes
-        /*
-        for($i = 0; $i <= $numero_dias; $i++){
-            $cell[$i] = new \stdClass();
-            $cell[$i]->dia = $i;
-            $cell[$i]->dia_semana = $this->nomeDiaSemana($this->getMes()->startOfMonth()->dayOfWeek);
-            $cell[$i]->feriado = false;
-            $cell[$i]->feriado_nome = null;
-            $cell[$i]->feriado_id = null;
-            $cell[$i]->feriado_data = null;
-            $cell[$i]->feriado_dia = null;
-            $cell[$i]->feriado_mes = null;
-            $cell[$i]->feriado_ano = null;
-            $cell[$i]->feriado_dia_semana;
-        }
-        */
         return view('livewire.mes-calendario',
             compact(
             'mes_nome',
@@ -116,8 +155,8 @@ class MesCalendario extends Component
             'mes_primeiro_dia_semana',
             'mes_primeiro_dia_semana_nome',
             'mes_ultimo_dia',
-            'feriados'
-
+            'feriados',
+            'cell'
             ));
     }
 
