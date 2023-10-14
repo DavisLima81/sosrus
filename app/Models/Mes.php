@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Request;
 
 /**
  * @property int $do_ano_mes_id
@@ -46,22 +48,33 @@ class Mes extends Model
         $do_ano_mes_id = $this->do_ano_mes_id;
         $ano = $this->ano;
         $numero_dias = cal_days_in_month(CAL_GREGORIAN, $do_ano_mes_id, $ano);
-        return $numero_dias;
+        return $this->numero_dias = $numero_dias;
+    }
+
+    public function getMes(): Carbon
+    {
+        $mes = Carbon::createFromFormat('Y-m-d', "{$this->ano}-{$this->do_ano_mes_id}-01");
+        return $this->mes = $mes;
     }
 
     //calcular numero de feriados
     public function numeroFeriados() : int
     {
-        //procura na tabela feriados os feriados do mes
-        $numero_feriados = Feriado::where('data', 'like', $this->ano . '%' . $this->do_ano_mes_id . '%')->count();
-        return $numero_feriados;
+        $do_ano_mes_id = $this->do_ano_mes_id;
+        $do_ano_mes_id = str_pad($do_ano_mes_id, 2, "0", STR_PAD_LEFT);
+        $ano = $this->ano;
+        $numero_feriados = Feriado::where('data', 'like', $ano . '-' . $do_ano_mes_id . '%')->count();
+        return $this->numero_feriados = $numero_feriados;
     }
 
     //calcular numero de feriados em dias que seriam uteis
     public function numeroFeriadosUteis() : int
     {
+        $ano = $this->ano;
+        $do_ano_mes_id = $this->do_ano_mes_id;
+        $do_ano_mes_id = str_pad($do_ano_mes_id, 2, "0", STR_PAD_LEFT);
         $numero_feriados_uteis = 0;
-        $feriados = Feriado::where('data', 'like', $this->ano . '%' . $this->do_ano_mes_id . '%')->get();
+        $feriados = Feriado::where('data', 'like', $ano . '-' . $do_ano_mes_id . '%')->get();
         foreach ($feriados as $feriado) {
             $dia_semana = date('w', strtotime($feriado->data));
             if ($dia_semana != 0 && $dia_semana != 6) {
