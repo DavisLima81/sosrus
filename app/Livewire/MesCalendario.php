@@ -49,6 +49,7 @@ class MesCalendario extends Component
         $mes = $this->getMes();
         $ano = $mes->year;
         $mes = $mes->month;
+        $mes = str_pad($mes, 2, '0', STR_PAD_LEFT);
         //pegar os feriados onde a string data corresponde com o mes e ano
         $feriados = Feriado::where('data', 'like', $ano . '-' . $mes . '%');
 
@@ -93,15 +94,13 @@ class MesCalendario extends Component
         $cell[] = null;
         //dd($apoio, $mes_primeiro_dia_semana, $numero_dias);
 
-        if($apoio != $numero_dias){
-            for($i = 0; $i <= $apoio; $i++){
+        if($mes_primeiro_dia_semana > 1) {
+            for ($i = 0; $i <= $apoio; $i++) {
                 if ($i < $mes_primeiro_dia_semana) {
                     $cell[$i] = '--';
-                }
-                elseif ($i >= $mes_primeiro_dia_semana && $i <= $numero_dias + 1) {
+                } elseif ($i >= $mes_primeiro_dia_semana && $i <= $numero_dias + 1) {
                     $cell[$i - 1] = $i - $mes_primeiro_dia_semana + 1;
-                }
-                elseif ($i > $numero_dias - 1) {
+                } elseif ($i > $numero_dias - 1) {
                     $cell[$i - 2] = $i - $mes_primeiro_dia_semana;
                 }
             }
@@ -112,12 +111,30 @@ class MesCalendario extends Component
                     $cell[$ref_cell] = array([$cell[$ref_cell], $feriado->nome]);
                 }
             }
-        } else {
+        } elseif($mes_primeiro_dia_semana == 1) {
+            for ($i = 0; $i <= $apoio - 1; $i++) {
+                if ($i < $mes_primeiro_dia_semana) {
+                    $cell[$i] = '--';
+                } elseif ($i >= $mes_primeiro_dia_semana && $i <= $numero_dias + 1) {
+                    $cell[$i - 1] = $i - $mes_primeiro_dia_semana + 1;
+                } elseif ($i > $numero_dias - 1) {
+                    $cell[$i - 2] = $i - $mes_primeiro_dia_semana;
+                }
+            }
+            if ($feriados->count() > 0) {
+                foreach ($feriados as $feriado) {
+                    $dia_feriado = substr($feriado->data, -2);
+                    $ref_cell = $dia_feriado + $mes_primeiro_dia_semana - 2;
+                    $cell[$ref_cell] = array([$cell[$ref_cell], $feriado->nome]);
+                }
+            }
+        }
+        elseif($apoio == $numero_dias) {
             for($i = -5; $i <= $apoio + 1; $i++){
                 if ($i <= 1) {
                     $cell[$i] = '--';
                 }
-                elseif ($i > 0 && $i <= $numero_dias) {
+                elseif ($i > 0 && $i <= $apoio) {
                     $cell[$i - 1] = $i - 1;
                 }
                 elseif ($i >= $apoio) {
@@ -139,7 +156,7 @@ class MesCalendario extends Component
     //TODO: AJUSTAR A FUNÇÃO RENDER PARA ENCAMINHAR OS DADOS ADEQUADOS PRA GERAR O CALENÁRIO
     public function render()
     {
-        $numero_dias = $this->getDoAnoMes()->numeroDias();
+        $ano = $this->getMes()->year;
         $mes_nome = $this->getMesNome();
         $mes_primeiro_dia = $this->getMes()->startOfMonth();
         $mes_primeiro_dia_semana = $this->getMes()->startOfMonth()->dayOfWeek;
@@ -150,13 +167,14 @@ class MesCalendario extends Component
 
         return view('livewire.mes-calendario',
             compact(
-            'mes_nome',
-            'mes_primeiro_dia',
-            'mes_primeiro_dia_semana',
-            'mes_primeiro_dia_semana_nome',
-            'mes_ultimo_dia',
-            'feriados',
-            'cell'
+                'ano',
+                'mes_nome',
+                'mes_primeiro_dia',
+                'mes_primeiro_dia_semana',
+                'mes_primeiro_dia_semana_nome',
+                'mes_ultimo_dia',
+                'feriados',
+                'cell'
             ));
     }
 

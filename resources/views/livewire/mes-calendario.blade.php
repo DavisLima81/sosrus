@@ -21,7 +21,7 @@
     @if($mes_nome != null && $mes_nome != 'MES_MOUNT_SELETOR')
         <div>
             <div class="grid h-10 flex-grow bg-gray-600 place-items-top justify-center">
-                <span class="py-1" wire:model.live="mes"><strong> {{ mb_strtoupper($mes_nome) }} </strong></span>
+                <span class="py-1" wire:model.live="mes"><strong> {{ mb_strtoupper($mes_nome)}} - {{ $ano }} </strong></span>
             </div>
             <hr class="my-1 border-gray-600">
             {{-- region CABEÇALHO COM OS NOMES DE DIAS DA SEMANA --}}
@@ -62,9 +62,11 @@
                             </strong></p>
                         <hr class="my-1 border-gray-600">
                         @if(is_array($value))
-                            <small class="justify-self-center text-amber-600">
-                            {{ ($value[0])[1] }}
-                            </small>
+                            <div class="bg-gray-900 p-2 rounded">
+                                <small class="justify-self-center text-center text-amber-600">
+                                    {{ ($value[0])[1] }}
+                                </small>
+                            </div>
                         @endif
                     </div>
                 @endforeach
