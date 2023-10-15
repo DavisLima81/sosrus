@@ -177,6 +177,7 @@ class EfetivoResource extends Resource
     {
         return [
             //
+            RelationManagers\EscalasRelationManager::class,
         ];
     }
 
