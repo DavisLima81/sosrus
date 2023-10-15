@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Efetivo extends Model
 {
@@ -69,6 +70,11 @@ class Efetivo extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function escalas(): BelongsToMany
+    {
+        return $this->belongsToMany(Escala::class, 'efetivos_escalas', 'efetivo_id', 'escala_id');
     }
 
     public function getTrigrama() : string {
