@@ -4,8 +4,11 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\EscalaResource\Pages;
 use App\Filament\Resources\EscalaResource\RelationManagers;
+use App\Models\Efetivo;
 use App\Models\Escala;
 use Filament\Forms;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
@@ -42,67 +45,97 @@ class EscalaResource extends Resource
     {
         return $form
             ->schema([
-                //criar campos
-                Forms\Components\Grid::make()
+                Section::make('Dados da escala')
+                    ->icon('heroicon-o-map')
                     ->schema([
-                        Forms\Components\Section::make()
+                        Forms\Components\Grid::make()
                             ->schema([
-                                Forms\Components\Select::make('escala_tipo_id')
-                                    ->relationship('escala_tipo', 'nome')
-                                    ->label('Tipo de escala')
-                                    ->required()
-                                    ->columnSpan(1),
-                                Forms\Components\Select::make('guarnicao_id')
-                                    ->relationship('guarnicao', 'sigla')
-                                    ->label('Guarnição')
-                                    ->required()
-                                    ->columnSpan(1),
-                                Forms\Components\TextInput::make('nome')
-                                    ->label('Nome')
-                                    ->required()
-                                    ->rule('max:10')
-                                    ->maxLength(10)
-                                    ->extraInputAttributes(['style' => 'text-transform:uppercase'])
-                                    ->placeholder('Máx 10 carac.')
-                                    ->columnSpan(2),
-                                Forms\Components\TextInput::make('descricao')
-                                    ->label('Descrição')
-                                    ->required()
-                                    ->rule('max:155')
-                                    ->maxLength(155)
-                                    ->placeholder('Descreva a escala. Máx 155 carac.')
-                                    ->columnSpan(4),
-                                Forms\Components\Select::make('regime_id')
-                                    ->relationship('regime', 'nome')
-                                    ->label('Regime')
-                                    ->required()
-                                    ->columnSpan(2),
-                                Forms\Components\Select::make('inicio')
-                                    ->options(['0600' => '06:00', '0800' => '08:00', '1200' => '12:00',
-                                        '1800' => '18:00', '2000' => '20:00'])
-                                    ->label('Início')
-                                    ->rule('max:4')
-                                    ->required()
-                                    ->columnSpan(1),
-                                Forms\Components\Select::make('duracao')
-                                    ->options([4 => '04', 8 => '08', 12 => '12',
-                                        24 => '24'])
-                                    ->label('Duração (h)')
-                                    ->rule('max:2')
-                                    ->required()
-                                    ->columnSpan(1),
-                                Forms\Components\toggle::make('ativo')
-                                    ->label('Ativo')
-                                    ->default(true)
-                                    ->extraAttributes(['class' => 'toggle toggle-error'])
-                                    ->columnSpan(1),
-                            ])
-                            ->columns([
-                                'sm' => 3,
-                                'lg' => 4,
+                                Forms\Components\Section::make()
+                                    ->schema([
+                                        Forms\Components\Select::make('escala_tipo_id')
+                                            ->relationship('escala_tipo', 'nome')
+                                            ->label('Tipo de escala')
+                                            ->required()
+                                            ->columnSpan(1),
+                                        Forms\Components\Select::make('guarnicao_id')
+                                            ->relationship('guarnicao', 'sigla')
+                                            ->label('Guarnição')
+                                            ->required()
+                                            ->columnSpan(1),
+                                        Forms\Components\TextInput::make('nome')
+                                            ->label('Nome')
+                                            ->required()
+                                            ->rule('max:10')
+                                            ->maxLength(10)
+                                            ->extraInputAttributes(['style' => 'text-transform:uppercase'])
+                                            ->placeholder('Máx 10 carac.')
+                                            ->columnSpan(2),
+                                        Forms\Components\TextInput::make('descricao')
+                                            ->label('Descrição')
+                                            ->required()
+                                            ->rule('max:155')
+                                            ->maxLength(155)
+                                            ->placeholder('Descreva a escala. Máx 155 carac.')
+                                            ->columnSpan(4),
+                                        Forms\Components\Select::make('regime_id')
+                                            ->relationship('regime', 'nome')
+                                            ->label('Regime')
+                                            ->required()
+                                            ->columnSpan(2),
+                                        Forms\Components\Select::make('inicio')
+                                            ->options(['0600' => '06:00', '0800' => '08:00', '1200' => '12:00',
+                                                '1800' => '18:00', '2000' => '20:00'])
+                                            ->label('Início')
+                                            ->rule('max:4')
+                                            ->required()
+                                            ->columnSpan(1),
+                                        Forms\Components\Select::make('duracao')
+                                            ->options([4 => '04', 8 => '08', 12 => '12',
+                                                24 => '24'])
+                                            ->label('Duração (h)')
+                                            ->rule('max:2')
+                                            ->required()
+                                            ->columnSpan(1),
+                                        Forms\Components\toggle::make('ativo')
+                                            ->label('Ativo')
+                                            ->default(true)
+                                            ->extraAttributes(['class' => 'toggle toggle-error'])
+                                            ->columnSpan(1),
+                                    ])
+                                    ->columns([
+                                        'sm' => 3,
+                                        'lg' => 4,
+
+                                    ]),
                             ]),
                     ]),
+                Section::make('Militares desta escala')
+                    ->icon('heroicon-o-user-group')
+                    ->schema([
+                        Forms\Components\Grid::make()
+                            ->schema([
+                                Forms\Components\Section::make()
+                                    ->schema([
+                                        Select::make('efetivo_id')
+                                            ->relationship('efetivos', 'trigrama')
+                                            ->options(
+                                                function () {
+                                                    $efetivo = Efetivo::all()->pluck('trigrama', 'id');
+                                                    return $efetivo;
+                                                    })
+                                            ->required()
+                                            ->multiple()
+                                            ->helperText('Selecione o(s) militar(es) desta escala.')
+                                            ->label('Militares desta escala')
+                                            ->columnSpan(4),
+                                    ])
+                                    ->columns([
+                                        'sm' => 3,
+                                        'lg' => 4,
 
+                                    ]),
+                            ]),
+                    ])
             ]);
     }
 

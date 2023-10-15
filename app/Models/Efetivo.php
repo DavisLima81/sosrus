@@ -15,6 +15,7 @@ class Efetivo extends Model
 
     protected $fillable = [
         'nome',
+        'rg',
         'nome_guerra',
         'trigrama',
         'precedencia_id',
@@ -74,7 +75,8 @@ class Efetivo extends Model
 
     public function escalas(): BelongsToMany
     {
-        return $this->belongsToMany(Escala::class, 'efetivos_escalas', 'efetivo_id', 'escala_id');
+        return $this->belongsToMany(Escala::class, 'efetivos_escalas', 'efetivo_id', 'escala_id')
+            ->withTimestamps();
     }
 
     public function getTrigrama() : string {

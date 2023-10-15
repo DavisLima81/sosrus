@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\EfetivoResource\RelationManagers;
 
+use App\Models\Escala;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
@@ -18,11 +20,17 @@ class EscalasRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('nome')
+                Select::make('nome')
+                    ->relationship('efetivos', 'nome')
                     ->required()
                     ->options(
                         function () {
-                            return \App\Models\Escala::all()->pluck('nome', 'id');
+                            $escalas = Escala::all();
+                            $options = [];
+                            foreach ($escalas as $escala) {
+                                $options[$escala->id] = $escala->getGuarnicaoSiglaAttribute() . ' - ' . $escala->nome;
+                            }
+                            return $options;
                         }
                     )
                     ->multiple()

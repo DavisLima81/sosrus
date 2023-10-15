@@ -45,6 +45,11 @@ class Escala extends Model
         return $this->belongsTo(Guarnicao::class, 'guarnicao_id');
     }
 
+    public function getGuarnicaoSiglaAttribute(): string
+    {
+        return $this->guarnicao->sigla;
+    }
+
     public function regime(): BelongsTo
     {
         return $this->belongsTo(Regime::class, 'regime_id');
@@ -52,7 +57,8 @@ class Escala extends Model
 
     public function efetivos(): BelongsToMany
     {
-        return $this->belongsToMany(Efetivo::class, 'efetivos_escalas', 'escala_id', 'efetivo_id');
+        return $this->belongsToMany(Efetivo::class, 'efetivos_escalas', 'escala_id', 'efetivo_id')
+            ->withTimestamps();
     }
 
     public function agenda() : HasOne

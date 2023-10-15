@@ -5,10 +5,14 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\EfetivoResource\Pages;
 use App\Filament\Resources\EfetivoResource\RelationManagers;
 use App\Models\Efetivo;
+use App\Models\Escala;
 use App\Models\Especialidade;
 use App\Models\Quadro;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -42,53 +46,87 @@ class EfetivoResource extends Resource
     {
         return $form
             ->schema([
-                //criar campos
-                Forms\Components\Grid::make()
+                Section::make('Dados do efetivo militar')
+                    ->icon('heroicon-m-identification')
                     ->schema([
-                        Forms\Components\Section::make()
+                        Forms\Components\Grid::make()
                             ->schema([
-                                Forms\Components\TextInput::make('nome')
-                                    ->label('Nome')
-                                    ->required()
-                                    ->maxLength(255)
-                                    ->columnSpan(3),
-                                Forms\Components\TextInput::make('trigrama')
-                                    ->label('Trigrama')
-                                    ->required()
-                                    ->unique(ignoreRecord: true)
-                                    ->rule('size:3')
-                                    ->maxLength(3)
-                                    ->extraInputAttributes(['style' => 'text-transform:uppercase'])
-                                    ->columnSpan(1),
-                                Forms\Components\Select::make('precedencia_id')
-                                    ->relationship('precedencia', 'nome')
-                                    ->label('Precedência')
-                                    ->required()
-                                    ->columnSpan(1),
-                                Forms\Components\TextInput::make('nome_guerra')
-                                    ->label('Guerra')
-                                    ->required()
-                                    ->maxLength(100)
-                                    ->columnSpan(2),
-                                Forms\Components\Select::make('quadro_id')
-                                    ->options(Quadro::all()->pluck('sigla', 'id')->toArray())
-                                    ->label('Quadro')
-                                    ->reactive()
-                                    ->afterStateUpdated(fn (callable $set) => $set('especialidade_id', null))
-                                    ->required()
-                                    ->columnSpan(1),
-                                Forms\Components\Select::make('especialidade_id')
-                                    ->options(function (callable $get) {
-                                        $quadro = Quadro::find($get('quadro_id'));
-                                        if (!$quadro) {
-                                            return Especialidade::all()->pluck('nome', 'id')->toArray();
-                                        }
-                                        return $quadro->especialidades->pluck('nome', 'id')->toArray();
-                                    })
-                                    ->disabled(fn (callable $get) => !$get('quadro_id'))
-                                    ->label('Especialidade')
-                                    ->required()
-                                    ->columnSpan(1),
+                                Forms\Components\Section::make()
+                                    ->schema([
+                                        Forms\Components\TextInput::make('nome')
+                                            ->label('Nome')
+                                            ->required()
+                                            ->maxLength(255)
+                                            ->columnSpan(3),
+                                        Forms\Components\TextInput::make('trigrama')
+                                            ->label('Trigrama')
+                                            ->required()
+                                            ->unique(ignoreRecord: true)
+                                            ->rule('size:3')
+                                            ->maxLength(3)
+                                            ->extraInputAttributes(['style' => 'text-transform:uppercase'])
+                                            ->columnSpan(1),
+                                        Forms\Components\Select::make('precedencia_id')
+                                            ->relationship('precedencia', 'nome')
+                                            ->label('Precedência')
+                                            ->required()
+                                            ->columnSpan(1),
+                                        Forms\Components\TextInput::make('nome_guerra')
+                                            ->label('Nome de guerra')
+                                            ->required()
+                                            ->maxLength(100)
+                                            ->columnSpan(2),
+                                        Forms\Components\Select::make('quadro_id')
+                                            ->options(Quadro::all()->pluck('sigla', 'id')->toArray())
+                                            ->label('Quadro')
+                                            ->reactive()
+                                            ->afterStateUpdated(fn (callable $set) => $set('especialidade_id', null))
+                                            ->required()
+                                            ->columnSpan(1),
+                                        Forms\Components\TextInput::make('rg')
+                                            ->label('RG')
+                                            ->rules('numeric')
+                                            ->mask('99999')
+                                            ->placeholder('99999')
+                                            ->minLength(5)
+                                            ->maxLength(99999)
+                                            ->required()
+                                            ->columnSpan(1),
+                                        Forms\Components\Select::make('especialidade_id')
+                                            ->options(function (callable $get) {
+                                                $quadro = Quadro::find($get('quadro_id'));
+                                                if (!$quadro) {
+                                                    return Especialidade::all()->pluck('nome', 'id')->toArray();
+                                                }
+                                                return $quadro->especialidades->pluck('nome', 'id')->toArray();
+                                            })
+                                            ->disabled(fn (callable $get) => !$get('quadro_id'))
+                                            ->label('Especialidade')
+                                            ->required()
+                                            ->columnSpan(1),
+                                        Forms\Components\DatePicker::make('data_nascimento')
+                                            ->default('d-m-Y')
+                                            ->label('Nascimento')
+                                            ->displayFormat('d/m/Y')
+                                            ->required()
+                                            ->columnSpan(1),
+                                        Forms\Components\Select::make('status_id')
+                                            ->relationship('status', 'nome')
+                                            ->label('Condição')
+                                            ->required()
+                                            ->columnSpan(1),
+                                    ])
+                                    ->columns([
+                                        'sm' => 3,
+                                        'lg' => 4,
+                                    ]),
+                            ]),
+                    ]),
+                Section::make('Classificação, função e escalas')
+                    ->icon('heroicon-m-arrow-trending-up')
+                    ->schema([
+                        Forms\Components\Grid::make()
+                            ->schema([
                                 Forms\Components\Select::make('subunidade_id')
                                     ->relationship('subunidade', 'sigla')
                                     ->label('OBM')
@@ -97,29 +135,28 @@ class EfetivoResource extends Resource
                                     ->relationship('funcao', 'nome')
                                     ->label('Função')
                                     ->required()
-                                    ->columnSpan(1),
+                                    ->columnSpan(2),
                                 Forms\Components\Select::make('secao_id')
                                     ->relationship('secao', 'sigla')
                                     ->label('Seção')
                                     ->required()
                                     ->columnSpan(1),
-                                Forms\Components\Select::make('status_id')
-                                    ->relationship('status', 'nome')
-                                    ->label('Condição')
+                                Select::make('escala_id')
+                                    ->relationship('escalas', 'nome')
                                     ->required()
-                                    ->columnSpan(1),
-                                Forms\Components\DatePicker::make('data_nascimento')
-                                    ->default('d-m-Y')
-                                    ->label('Nascimento')
-                                    ->displayFormat('d/m/Y')
-                                    ->required()
-                                    ->columnSpan(1),
-                                Forms\Components\Select::make('user_id')
-                                    ->relationship('user', 'email')
-                                    ->label('Usuário')
-                                    ->nullable()
-                                    ->unique(ignoreRecord: true)
-                                    ->columnSpan(1),
+                                    ->options(
+                                        function () {
+                                            $escalas = Escala::all();
+                                            $options = [];
+                                            foreach ($escalas as $escala) {
+                                                $options[$escala->id] = $escala->getGuarnicaoSiglaAttribute() . ' - ' . $escala->nome;
+                                            }
+                                            return $options;
+                                        })
+                                    ->multiple()
+                                    ->helperText('Selecione a(s) escala(s) a que o militar concorre')
+                                    ->label('Escala(s) do militar')
+                                    ->columnSpan(4),
 
                             ])
                             ->columns([
@@ -127,6 +164,24 @@ class EfetivoResource extends Resource
                                 'lg' => 4,
                             ]),
                     ]),
+                Section::make('Usuário')
+                    ->description('Registro de usuário associado ao militar')
+                    ->icon('heroicon-o-lock-closed')
+                    ->schema([
+                        Forms\Components\Grid::make()
+                            ->schema([
+                                Forms\Components\Select::make('user_id')
+                                    ->relationship('user', 'email')
+                                    ->label('Usuário')
+                                    ->nullable()
+                                    ->unique(ignoreRecord: true)
+                                    ->columnSpan(2),
+                            ])
+                            ->columns([
+                                'sm' => 3,
+                                'lg' => 4,
+                            ]),
+                    ])
             ]);
     }
     //enregion
@@ -177,7 +232,7 @@ class EfetivoResource extends Resource
     {
         return [
             //
-            RelationManagers\EscalasRelationManager::class,
+            //RelationManagers\EscalasRelationManager::class,
         ];
     }
 
