@@ -17,6 +17,7 @@ class EfetivosSeeder extends Seeder
         DB::table('efetivos')->insert([
             [
                 'nome' => 'Davis Ferreira de Lima',
+                'rg' => '28922',
                 'nome_guerra' => 'Davis',
                 'trigrama' => 'DVS',
                 'precedencia_id' => 12,
@@ -34,6 +35,7 @@ class EfetivosSeeder extends Seeder
             ],
             [
                 'nome' => 'Fulano de Tal',
+                'rg' => '31001',
                 'nome_guerra' => 'Tal',
                 'trigrama' => 'TAL',
                 'precedencia_id' => 1,
@@ -51,6 +53,7 @@ class EfetivosSeeder extends Seeder
             ],
             [
                 'nome' => 'Ciclano de Brau',
+                'rg' => '32002',
                 'nome_guerra' => 'Brau',
                 'trigrama' => 'CIC',
                 'precedencia_id' => 1,
@@ -68,6 +71,7 @@ class EfetivosSeeder extends Seeder
             ],
             [
                 'nome' => 'João Steward',
+                'rg' => '33003',
                 'nome_guerra' => 'J Steward',
                 'trigrama' => 'JST',
                 'precedencia_id' => 1,
@@ -85,6 +89,7 @@ class EfetivosSeeder extends Seeder
             ],
             [
                 'nome' => 'Pedro Rhodes',
+                'rg' => '34004',
                 'nome_guerra' => 'P Rhodes',
                 'trigrama' => 'PRO',
                 'precedencia_id' => 1,
@@ -102,6 +107,7 @@ class EfetivosSeeder extends Seeder
             ],
             [
                 'nome' => 'José Seichs',
+                'rg' => '35005',
                 'nome_guerra' => 'Seichs',
                 'trigrama' => 'SEI',
                 'precedencia_id' => 1,
@@ -119,6 +125,7 @@ class EfetivosSeeder extends Seeder
             ],
             [
                 'nome' => 'Maria Margot',
+                'rg' => '36006',
                 'nome_guerra' => 'Maria',
                 'trigrama' => 'MAR',
                 'precedencia_id' => 1,
@@ -136,6 +143,7 @@ class EfetivosSeeder extends Seeder
             ],
             [
                 'nome' => 'Joaquina Gall',
+                'rg' => '37007',
                 'nome_guerra' => 'Joaquina',
                 'trigrama' => 'GAL',
                 'precedencia_id' => 1,
