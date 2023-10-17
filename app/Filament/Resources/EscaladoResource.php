@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\EscaladoResource\Pages;
 use App\Filament\Resources\EscaladoResource\RelationManagers;
+use App\Filament\Resources\EscaladoResource\Widgets\EscaladoOverview;
 use App\Models\Escala;
 use App\Models\Escalado;
 use Carbon\Carbon;
@@ -21,6 +22,7 @@ use Filament\Tables\Columns\ViewColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\UserResource\Widgets\UserOverview;
 
 class EscaladoResource extends Resource
 {
@@ -180,6 +182,13 @@ class EscaladoResource extends Resource
             'create' => Pages\CreateEscalado::route('/create'),
             'edit' => Pages\EditEscalado::route('/{record}/edit'),
             'view' => Pages\ViewEscalado::route('/{record}'),
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            EscaladoOverview::class,
         ];
     }
 }
