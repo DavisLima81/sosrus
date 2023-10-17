@@ -86,7 +86,7 @@
                     <td class="text-primary-600">ENTRA: </td>
                     <td>{{ $permuta->entraEfetivoTrigrama() }}</td>
                     <td class="text-primary-600">REGISTRADA:</td>
-                    <td>{{ $permuta->created_at->format('d/m/Y') }}</td>
+                    <td>{{ $permuta->created_at->format('d/m/Y - h:i') }}</td>
                 </tr>
             @endforeach
             </tbody>
