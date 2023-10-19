@@ -91,5 +91,23 @@ class Escalado extends Model
         }
         return $this->efetivo->trigrama;
     }
+
+    public function getEfetivoIdPermuta() : string
+    {
+        if ($this->temPermuta()) {
+            return $this->getPermutas()->last()->entra_efetivo->id;
+        }
+        return 'N/A';
+    }
+
+    public function efetivo_id() : string
+    {
+        if($this->temPermuta())
+        {
+            return $this->getEfetivoIdPermuta();
+        }
+        return $this->efetivo->id;
+    }
+
 }
 
