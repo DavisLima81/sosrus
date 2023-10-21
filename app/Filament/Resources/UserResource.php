@@ -47,6 +47,13 @@ class UserResource extends Resource
                     ->email()
                     ->required()
                     ->label('Email'),
+                // Using Select Component
+                Forms\Components\Select::make('roles')
+                    ->relationship('roles', 'name')
+                    ->multiple()
+                    ->rules(['array', 'max:1'])
+                    ->preload()
+                    ->searchable(),
                 Forms\Components\TextInput::make('password')
                     ->password()
                     ->required()
