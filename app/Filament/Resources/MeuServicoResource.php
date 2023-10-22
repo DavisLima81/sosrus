@@ -88,7 +88,7 @@ class MeuServicoResource extends Resource
             ])
             ->defaultSort('data', 'asc')
             ->filters([
-                //
+                //filtro por data
                 SelectFilter::make('data')
                     ->options(function () {
                         $data = [];

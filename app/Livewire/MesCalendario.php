@@ -153,7 +153,6 @@ class MesCalendario extends Component
         return $cell;
     }
 
-    //TODO: AJUSTAR A FUNÇÃO RENDER PARA ENCAMINHAR OS DADOS ADEQUADOS PRA GERAR O CALENÁRIO
     public function render()
     {
         $ano = $this->getMes()->year;

@@ -158,7 +158,6 @@ class MesResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //TODO: relacionar com Feriado
 
         ];
     }
