@@ -1,0 +1,23 @@
+                                       ####### LEVANTAMENTOS DE DOMÍNIO #######
+I- Fazer levantamentos de processos de negócio
+    Conversar com os escalantes com o fim de entender o processo de formação das "escala_agendas".
+Tc Bastos [médicos], Maj Alvim [enfermeiros], Cap Ferrão [Cmt SAR], Cap Nascimento [Cop, mecânicos e Of. dia],
+Sub Archanjo [Jacarepaguá], Sub Veríssimo [Lagoa], Sgt Maia [Aux enfermagem], Sgt Matias [COVANT].
+
+    //TODO: responder a todas as questões sobre PROCESSO a seguir:
+    1- Qual processo para formação de cada escala_agenda?
+
+    2- Quais são os atores envolvidos?
+
+    3- Quais são as atividades realizadas por cada ator?
+
+    4- Quais são os artefatos (documentos, mensagens) gerados por cada ator?
+
+    5- Quais são as regras de negócio envolvidas?
+
+    6- Quais são os sistemas envolvidos?
+
+    7- Quais são os dados envolvidos?
+
+    8- Quais são os canais de comunicação envolvidos?
+
