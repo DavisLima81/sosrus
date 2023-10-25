@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\EscaladoResource\Pages;
 use App\Filament\Resources\EscaladoResource\RelationManagers;
 use App\Filament\Resources\EscaladoResource\Widgets\EscaladoOverview;
+use App\Models\Efetivo;
+use App\Models\EfetivoEscala;
 use App\Models\Escala;
 use App\Models\Escalado;
 use Carbon\Carbon;
@@ -64,12 +66,30 @@ class EscaladoResource extends Resource
                                         }
                                         return $escala_show;
                                     })
+                                    ->live()
+                                    ->afterStateUpdated(fn (callable $set) => $set('efetivo_id', null))
                                     ->label('Escala')
                                     ->required()
                                     ->columnSpan(1),
                                 Forms\Components\Select::make('efetivo_id')
-                                    ->relationship('efetivo', 'trigrama')
-                                    ->label('Escala')
+                                    ->options(function (callable $get) {
+                                        $escala = Escala::find($get('escala_id'));
+                                        $efetivo_show = [];
+                                        if(!$escala){
+                                            $efetivos = Efetivo::all();
+                                            foreach ($efetivos as $efetivo) {
+                                                $efetivo_show[$efetivo->id] = $efetivo->trigrama . ' - ' . $efetivo->rg;
+                                            }
+                                            return $efetivo_show;
+                                        }
+                                        $efetivo_escala = EfetivoEscala::where('escala_id', $get('escala_id'))->get();
+                                        $efetivos = Efetivo::whereIn('id', $efetivo_escala->pluck('efetivo_id'))->get();
+                                        foreach ($efetivos as $efetivo) {
+                                            $efetivo_show[$efetivo->id] = $efetivo->trigrama . ' - ' . $efetivo->rg;
+                                        } return $efetivo_show;
+                                    })
+                                    ->disabled(fn (callable $get) => !$get('escala_id'))
+                                    ->label('Escalado')
                                     ->required()
                                     ->columnSpan(1),
                                 Forms\Components\DatePicker::make('data')
