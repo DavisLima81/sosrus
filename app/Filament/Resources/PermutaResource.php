@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PermutaResource\Pages;
 use App\Filament\Resources\PermutaResource\RelationManagers;
 use App\Models\Efetivo;
+use App\Models\EfetivoEscala;
 use App\Models\Escala;
 use App\Models\Escalado;
 use App\Models\Permuta;
@@ -128,15 +129,18 @@ class PermutaResource extends Resource
                                 Forms\Components\Select::make('entra_efetivo_id')
                                     ->options(function (callable $get) {
                                         $sai_efetivo_id = $get('sai_efetivo_id');
+                                        $efetivo_escala = EfetivoEscala::where('escala_id', $get('escala_id'))->get();
+                                        $efetivos = Efetivo::whereIn('id', $efetivo_escala->pluck('efetivo_id'))->get();
                                         if ($sai_efetivo_id == null) {
-                                            return Efetivo::all()->pluck('trigrama', 'id');
+                                            return $efetivos->pluck('trigrama', 'id');
                                         } else {
                                             $a[0] = $sai_efetivo_id;
-                                            return Efetivo::whereNotIn('id', $a)->pluck('trigrama', 'id');
+                                            return Efetivo::whereIn('id', $efetivo_escala->pluck('efetivo_id'))->whereNotIn('id', $a)->pluck('trigrama', 'id');
                                         }
                                     })
+                                    ->disabled(fn (callable $get) => !$get('data'))
                                     ->label('Entra')
-                                    ->reactive()
+                                    ->live()
                                     ->required()
                                     ->columnSpan(1),
                                 //TODO: implementar lógica pra avaliar se está no prazo

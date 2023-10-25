@@ -16,8 +16,9 @@ class FuncoesSeeder extends Seeder
         //criar funções
         DB::table('funcoes')->insert([
             ['nome' => 'Comandante', 'sigla' => 'CMD',],
-            ['nome' => 'Chefe', 'sigla' => 'CH',],
-            ['nome' => 'Subchefe', 'sigla' => 'SCH',],
+            ['nome' => 'Subcomandante', 'sigla' => 'SMD',],
+            ['nome' => 'Chefe', 'sigla' => 'CHF',],
+            ['nome' => 'Subchefe', 'sigla' => 'SCF',],
             ['nome' => 'Adjunto', 'sigla' => 'ADJ',],
             ['nome' => 'Colaborador', 'sigla' => 'COL',],
             ['nome' => 'Auxiliar', 'sigla' => 'AUX',],
