@@ -6,6 +6,44 @@ Sub Archanjo [Jacarepaguá], Sub Veríssimo [Lagoa], Sgt Maia [Aux enfermagem], 
 
     //TODO: responder a todas as questões sobre PROCESSO a seguir:
     1- Qual processo para formação de cada escala_agenda?
+        -> a formação da escala mensal seguirá uma das regras a seguir:
+
+                                    ### 1 - PRECEDÊNCIA ###
+        1- Será gravado no banco previamente a lista de militares da escala (EfetivoEscala);
+        2- Deverá ser implementada a propriedade precedência na classe Efetivo. Para que seja utilizada nos cálculos;
+        3- Calcula-se a quantidade de serviços que cada militar deve cumprir no mês. Dividindo-se o total de dias do
+        mês pelo número de militares da escala;
+        4- Sendo a divisão inexata, o resto da divisão (serviços remanescentes) será distribuído entre os militares com
+        menor precedência;
+        5- As etapas 3 e 4 são realizadas para serviços de dias úteis ('escala preta') e para dias não úteis, fim de
+        semana ou feriados ('escala vermelha');
+        6- Como resultado deste processo, teremos uma lista de militares com a quantidade de serviços que cada um deve
+        cumprir no mês;
+        7- Dever-a ser criada uma tela (view) com uma tabela que apresenta os militares (do mais antigo para o mais moderno),
+        com a quantidade ser serviços, e indicando um dos estados ('a escolher', 'escolhendo', 'escolhido', 'N/A').
+        Segue tabela exmplificativa:
+                                        ESCALA COP SAR - SETEMBRO 2023
+                ############################################################################
+                ## PH - TRIGRAMA / RG - VERMELHA - PRETA - TOTAL - ESTADO     -   OBS     ##
+                #  01 - DVS / 28922   -    2     -   3   -   5   - ESCOLHENDO -            #
+                #  02 - BAR / 44162   -    0     -   0   -   0   -     N/A    -  FÉRIAS    #
+                #  03 - BOS / 48233   -    3     -   3   -   6   - A ESCOLHER -            #
+                ############################################################################
+
+        8- Deve ser implementado uma forma de forçar uma quantidade de serviços para um militar antes dos cálculos. Por exemplo:
+        Determinado militar vai tirar 15 dias de férias. Poder-se-á atribuir uma quantidade de serviços pra esse militar antes dos
+        cálculos serem processados. E por consequência, os cálculos serão procedidos com os serviços restantes.
+        Pensar em uma forma de implementar isso....
+
+                                    ### 2 - ALAS DE SERVIÇO ###
+                1- Será gravado no banco previamente a lista de militares das 'alas de serviço' (Ala);
+                2- A seguir será atribuído pelo sistema, em cada escala, o militar da ala para cada dia do mês;
+                3- Deverá haver grande liberdade para o escalante
+
+
+                            # 2 - ESCALA #
+
+
 
     2- Quais são os atores envolvidos?
 
