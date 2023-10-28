@@ -131,7 +131,8 @@ class EfetivoResource extends Resource
                                     ->relationship('subunidade', 'sigla')
                                     ->label('OBM')
                                     ->required()
-                                    ->columnSpan(1),Forms\Components\Select::make('funcao_id')
+                                    ->columnSpan(1),
+                                Forms\Components\Select::make('funcao_id')
                                     ->relationship('funcao', 'nome')
                                     ->label('Função')
                                     ->required()

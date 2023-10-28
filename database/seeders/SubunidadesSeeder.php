@@ -18,6 +18,7 @@ class SubunidadesSeeder extends Seeder
             ['nome' => 'Grupamento de Operações Aéreas', 'sigla' => 'GOA',],
             ['nome' => '1º Destacamento do Grupamento de Operações Aéreas', 'sigla' => '1/GOA',],
             ['nome' => 'Coordenadoria de Operações com Veículos Aéreos Não Tripulados', 'sigla' => 'COVANT',],
+            ['nome' => 'Unidade ou Órgão de fora da estrutura do GOA', 'sigla' => 'ASA',],
         ]);
     }
 }
