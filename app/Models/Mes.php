@@ -129,6 +129,14 @@ class Mes extends Model
         return $numero_dias_nao_uteis;
     }
 
+    public function getMesNome(): string
+    {
+        $mes = $this->getMes();
+        $mes_nome = $mes->locale('pt_BR')->monthName;
+        $mes_nome = mb_strtoupper($mes_nome);
+        return $this->mes_nome = $mes_nome;
+    }
+
     //calcular primeiro dia da semana do mes
     public function primeiroDiaSemana() : int
     {
