@@ -122,7 +122,8 @@ class MeuServicoResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListMeuServicos::route('/'),
+            //'index' => Pages\ListMeuServicos::route('/'),
+            'index' => Pages\CalendarioMeuServicos::route('/'),
             //'create' => Pages\CreateMeuServico::route('/create'),
             //'edit' => Pages\EditMeuServico::route('/{record}/edit'),
             /*'view' => Pages\ViewEscalado::route('/{record}'),*/

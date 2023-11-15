@@ -19,6 +19,7 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Resources\EscaladoResource\Widgets\EscaladoOverview;
+use Saade\FilamentFullCalendar\FilamentFullCalendarPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -59,7 +60,19 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->sidebarCollapsibleOnDesktop()
             ->plugins([
-                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
+                FilamentFullCalendarPlugin::make()
+                    ->schedulerLicenseKey('GPL-My-Project-Is-Open-Source')
+                    ->selectable()
+                    ->editable()
+                    ->timezone('America/Sao_Paulo')
+                    ->locale('pt-br')
+                    ->plugins(['dayGrid', 'timeGrid'])
+                    ->config([
+                        'start' => 'prev,next',
+                        'center' => 'title',
+                        'end' => 'dayGridMonth'
+                    ])
             ]);
     }
 }
