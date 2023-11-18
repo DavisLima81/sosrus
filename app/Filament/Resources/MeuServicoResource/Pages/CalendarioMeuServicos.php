@@ -10,4 +10,7 @@ class CalendarioMeuServicos extends Page
     protected static string $resource = MeuServicoResource::class;
 
     protected static string $view = 'filament.resources.meu-servico-resource.pages.calendario-meu-servicos';
+
+    protected static ?string $title = 'Calendário';
+
 }
