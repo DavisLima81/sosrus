@@ -1,21 +1,3 @@
-{{--
-1- O QUE DESEJO MOSTRAR NA TELA E CALENDARIO:
-    - O nome (string) do mês selecionado
-    - O ano (integer) selecionado
-    - A tela formatada em calendário com os dias do mês selecionado, sendo que:
-        - O calendário será configurado em grid, com 7 colunas e 6 linhas
-        - A primeira linha será o cabeçalho, com os nomes dos dias da semana
-        - A primeira coluna iniciará com a segunda-feira
-        - Os dias do mês serão exibidos em cada célula do grid
-        - Os dias do mês serão exibidos em cada célula do grid
-        - Os dias de fim de semana e de feriado exibirão fonte em vermelho e fundo em cinza
-    - Os eventos serão plotados dentro de cada célula correspondente ao dia do evento
-    - Os eventos serão exibidos em forma de badge
-
-
-
---}}
-
 
 <div>
     @if($mes_nome != null && $mes_nome != 'MES_MOUNT_SELETOR')
