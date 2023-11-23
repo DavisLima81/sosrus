@@ -30,7 +30,26 @@ I- Definir o escopo mínimo inicial do projeto a ser entregue para implantação
 
 
 
-
+dinamica de registro:
+## CASO 1 - EFETIVO PRÉCADASTRADO ##
+    1- usuário acessa a página 'welcome' e clica no botão 'cadastrar';
+    2- usuário é encaminhado para a página de cadastro de usuário;
+    3- usuário preenche os campos de cadastro de usuário e clica no botão 'cadastrar';
+        DADOS QUE SERÃO SOLICITADOS:
+        - RG e DATA de NASCIMENTO;
+    4- sistema verifica se já existe usuário cadastrado no sistema para este RG;
+        - se existir, sistema retorna mensagem de erro e solicita que o usuário entre em contato com o administrador do
+        sistema;
+        - se não existe usuário cadastrado, prossegue o fluxo;
+    5- sistema verifica se o RG e a DATA DE NASCIMENTO conferem;
+        - se não conferem, sistema retorna mensagem de erro e solicita que o usuário entre em contato com o administrador;
+        - se conferem, prossegue o fluxo;
+    6- sistema envia os dados para o controler de cadastro de usuário;
+    7- controller prepara os dados, cria senha, gera token de confirmação de cadastro e envia email para o usuário;
+    8- usuário recebe email com link para confirmação de cadastro;
+    9- usuário clica no link e é encaminhado para a página de confirmação de cadastro;
+    10- usuário confirma o cadastro, controller associa o usuário à instância de efetivo, à credencial de acesso
+    (permissões) e é encaminhado para a página de login;
 
 
 
