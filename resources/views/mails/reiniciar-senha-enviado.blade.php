@@ -98,7 +98,7 @@
     </style>
 </head>
 <body style="background-color: #f6f6f6; font-family: sans-serif; -webkit-font-smoothing: antialiased; font-size: 14px; line-height: 1.4; margin: 0; padding: 0; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">
-<span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">Contato realizado</span>
+<span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">Renovar senha SOS'r us</span>
 <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #f6f6f6; width: 100%;" width="100%" bgcolor="#f6f6f6">
     <tr>
         <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;" valign="top">&nbsp;</td>
@@ -115,22 +115,11 @@
                                 <tr>
                                     <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;" valign="top">
                                         <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;"
-                                        >Olá Sr(a), {{$precedencia . ' ' . $nome_guerra}}</p>
-
+                                        >Olá  Sr(a). {{$name ?? ''}}.</p>
                                         <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;"
-                                        >Seu cadastro no SOS'r us foi realizado e a aqui seguem seus dados de acesso:</p>
-
+                                        >Este é o email para renovação da sua senha no sistema SOS'r us gerado mediante solicitação.</p>
                                         <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;"
-                                        >login: <span style="text-decoration: none; font-weight: bold">{{$email}}</span></p>
-                                        <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;"
-                                        >senha: <span style="text-decoration: none; font-weight: bold">{{$prepass}}</span></p>
-                                        <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;"
-                                        >Esta senha fornecida é segura pois seu armazenamento é encriptado. Você pode permanecer
-                                            com ela ou determinar uma nova.</p>
-                                        <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;"
-                                        >Caso ache conveniente criar sua própria senha, siga para a página de 'Login' e clique em 'Esqueceu sua senha?'.</p>
-                                        <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;"
-                                        >Após preencher e enviar os dados solicitados você receberá um email para atribuir sua nova senha.</p>
+                                        >Por favor clique no botão abaixo para prosseguir com a renovação da sua senha.</p>
                                         <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; box-sizing: border-box; width: 100%;" width="100%">
                                             <tbody>
                                             <tr>
@@ -138,7 +127,7 @@
                                                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: auto;">
                                                         <tbody>
                                                         <tr>
-                                                            <td style="font-family: sans-serif; font-size: 14px; vertical-align: top; border-radius: 5px; text-align: center; background-color: #3498db;" valign="top" align="center" bgcolor="#3498db"> <a href="{{env('APP_URL') . "/admin"}}" target="_blank" style="border: solid 1px #3498db; border-radius: 5px; box-sizing: border-box; cursor: pointer; display: inline-block; font-size: 14px; font-weight: bold; margin: 0; padding: 12px 25px; text-decoration: none; text-transform: capitalize; background-color: #3498db; border-color: #3498db; color: #ffffff;">Fazer login</a> </td>
+                                                            <td style="font-family: sans-serif; font-size: 14px; vertical-align: top; border-radius: 5px; text-align: center; background-color: #3498db;" valign="top" align="center" bgcolor="#3498db"> <a href="{{$url}}" target="_blank" style="border: solid 1px #3498db; border-radius: 5px; box-sizing: border-box; cursor: pointer; display: inline-block; font-size: 14px; font-weight: bold; margin: 0; padding: 12px 25px; text-decoration: none; text-transform: capitalize; background-color: #3498db; border-color: #3498db; color: #ffffff;">Renovar senha</a> </td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
@@ -146,7 +135,14 @@
                                             </tr>
                                             </tbody>
                                         </table>
-                                        <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Até breve!</p>
+                                        <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Este link para recuperar sua senha vai expirar em 60 minutos.</p>
+                                        <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Caso você não tenha solicitado recuperação de senha ou o fez por engano e/ou não deseja prosseguir, nenhuma ação é necessária. Basta deixar o link expirar.</p>
+                                        <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Até breve,</p>
+                                        <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">SOS'r us</p>
+                                        <br>
+                                        <hr>
+                                        <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; margin-bottom: 15px;">Se você não estiver conseguindo usar o botão 'Renovar senha', copie e cole o endereço abaixo no seu navegador:</p>
+                                        {{$url}}
                                     </td>
                                 </tr>
                             </table>
