@@ -1,4 +1,63 @@
+                                       ######################################################
+                                       ####### MINIMUM VIABLE AND CONTINUOUS DELIVERY #######
+                                       ####### MÍNIMO  VIÁVEL  E  ENTREGA   CONSTANTE #######
+                                       ######################################################
+
+I- Definir o escopo mínimo inicial do projeto a ser entregue para implantação e início de uso.
+    1- Dentro do escopo mínimo, destaco:
+        -> Sistema deve permitir cadastrar previamente os militares que farão uso do sistema (classe EFETIVO). Definir se
+        serão cadastrados via formulários de entrada ou por importação dos dados de uma planilha (xls ou csv);
+
+        -> Sistema deve permitir o cadastro de usuários, com níveis diferentes de credenciais de acesso (permissões) com
+        o fim de permitir o acesso ao sistema. Definir uma dinâmica de cadastro com login (e-mail) e senha e que confirme
+        a identidade do usuário para associá-lo ao militar cadastrado no sistema. Pensar em uma dinâmica de recuperação de
+        senha ou implementação de autenticação de 2 fatores ou login social via google;
+
+        -> Os usuários de administração do sistema (super usuários) devem ter acesso a todas as funcionalidades do sistema;
+
+        -> Os usuários de adminstração das escalas (escalantes) devem ter acesso a todas as funcionalidades para administração
+        das escalas. Isto é, todas as funcionalidades do sistema exceto as configuração do sistema e aquelas de configuração
+        da administração das escalas que não sejam de sua responsabilidade;
+
+        -> Os usuários regulares terão acesso funcionalidade associadas somente aos seus próprios interesses, Isto é: admi-
+        nistrar seus dados de perfil, visualizar todos escalados das escalas que participa, visualizar suas escalas e seus
+        serviços, solicitar e autorizar permutas;
+
+        -> Elaborar a dinâmica de permutas de serviços. Que deverá ser solicitada por um usuário regular, validade quanto
+        ao prazo de solicitação e valências dos envolvidos, e autorizada pelo outro usuário regular envolvido na permuta.
+        Tudo mediante comunicação por email. E ao fim um email de confirmação será enviado para ambos os usuários envolvi-
+        dos, para os escalantes, para o email do GOA e para o administrador do sistema.
+
+
+
+dinamica de registro:
+## CASO 1 - EFETIVO PRÉCADASTRADO ##
+    1- usuário acessa a página 'welcome' e clica no botão 'cadastrar';
+    2- usuário é encaminhado para a página de cadastro de usuário;
+    3- usuário preenche os campos de cadastro de usuário e clica no botão 'cadastrar';
+        DADOS QUE SERÃO SOLICITADOS:
+        - RG e DATA de NASCIMENTO;
+    4- sistema verifica se já existe usuário cadastrado no sistema para este RG;
+        - se existir, sistema retorna mensagem de erro e solicita que o usuário entre em contato com o administrador do
+        sistema;
+        - se não existe usuário cadastrado, prossegue o fluxo;
+    5- sistema verifica se o RG e a DATA DE NASCIMENTO conferem;
+        - se não conferem, sistema retorna mensagem de erro e solicita que o usuário entre em contato com o administrador;
+        - se conferem, prossegue o fluxo;
+    6- sistema envia os dados para o controler de cadastro de usuário;
+    7- controller prepara os dados, cria senha, gera token de confirmação de cadastro e envia email para o usuário;
+    8- usuário recebe email com link para confirmação de cadastro;
+    9- usuário clica no link e é encaminhado para a página de confirmação de cadastro;
+    10- usuário confirma o cadastro, controller associa o usuário à instância de efetivo, à credencial de acesso
+    (permissões) e é encaminhado para a página de login;
+
+
+
+
+
+
                                        ####### LEVANTAMENTOS DE DOMÍNIO #######
+
 I- Fazer levantamentos de processos de negócio
     Conversar com os escalantes com o fim de entender o processo de formação das "escala_agendas".
 Tc Bastos [médicos], Maj Alvim [enfermeiros], Cap Ferrão [Cmt SAR], Cap Nascimento [Cop, mecânicos e Of. dia],
@@ -42,8 +101,6 @@ Sub Archanjo [Jacarepaguá], Sub Veríssimo [Lagoa], Sgt Maia [Aux enfermagem], 
 
 
                             # 2 - ESCALA #
-
-
 
     2- Quais são os atores envolvidos?
 

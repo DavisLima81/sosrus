@@ -30,6 +30,12 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->registration(function(){
+                return redirect()->route('pre-cadastrar');
+            })
+            ->passwordReset(function(){
+                return redirect()->route('esqueci-senha');
+            })
             ->colors([
                 'primary' => Color::Orange,
             ])

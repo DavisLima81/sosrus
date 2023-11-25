@@ -192,15 +192,31 @@ class EfetivoResource extends Resource
         return $table
             ->columns([
                 //
-                TextColumn::make('trigrama')
+                TextColumn::make('status.sigla')
                     ->sortable()
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'DISP' => 'success',
+                        'FERI' => 'danger',
+                        'LMED' => 'danger',
+                        'LMPA' => 'danger',
+                        'LUTO' => 'danger',
+                        'LESP' => 'danger',
+                        'LTIP' => 'danger',
+                        'CRSO' => 'danger',
+                    })
                     ->searchable()
-                    ->label('TRIG'),
+                    ->label('STATUS'),
 
                 TextColumn::make('precedencia.sigla')
                     ->sortable()
                     ->searchable()
-                    ->label('POSTO/GRAD'),
+                    ->label('P/GRAD'),
+
+                TextColumn::make('trigrama')
+                    ->sortable()
+                    ->searchable()
+                    ->label('TRIG'),
 
                 TextColumn::make('nome_guerra')
                     ->sortable()
@@ -210,6 +226,8 @@ class EfetivoResource extends Resource
                 TextColumn::make('user.email')
                     ->sortable()
                     ->searchable()
+                    ->badge()
+                    ->color('gray')
                     ->label('USUÁRIO'),
             ])
             ->defaultSort('trigrama', 'asc')

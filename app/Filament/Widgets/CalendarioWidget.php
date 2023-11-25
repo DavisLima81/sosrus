@@ -23,9 +23,10 @@ class CalendarioWidget extends FullCalendarWidget
 
     public function fetchEvents(array $fetchInfo): array
     {
-        $aa = $this->events->meu_servicos;
+        return $this->events->meu_servicos;
+        //$aa = $this->events->meu_servicos;
         //dd($aa);
-        return $aa;
+        //return $aa;
     }
 
 }
