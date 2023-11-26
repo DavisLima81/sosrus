@@ -20,7 +20,7 @@
 
         <div class="hero-content text-center">
             <div class="max-w-md pt-24">
-                <h1 class="text-8xl font-bold text-orange-600 mt-12">S.O.S.'r us </h1>
+                <h1 class="text-8xl font-bold text-orange-600 mt-12">SOS 'r us </h1>
                 <p class="pt-3 pb-16 text-gray-300">Nossa coordenação de serviços de socorro e expediente</p>
                 @if(!Auth::check())
                     <a href="{{ route('filament.admin.home') }}" class="btn btn-sm btn-outline btn-warning">Login</a>
