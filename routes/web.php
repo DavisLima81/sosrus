@@ -25,7 +25,7 @@ Route::middleware('web')->group(function () {
     Route::get('/falar-administrador', [GuestController::class, 'falar_administrador'])
         ->middleware('guest')->name('falar-administrador');
     Route::post('/falar-administrador', [GuestController::class, 'email_administrador'])
-        ->middleware('guest')->name('falar-administrador');
+        ->middleware('guest')->name('email_administrador');
     Route::get('/mensagem-enviada', [GuestController::class, 'mensagem_enviada'])
         ->middleware('guest')->name('mensagem-enviada');
     Route::get('/cadastro-realizado', [GuestController::class, 'cadastro_realizado'])
