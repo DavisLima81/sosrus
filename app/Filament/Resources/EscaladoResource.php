@@ -206,6 +206,32 @@ class EscaladoResource extends Resource
                     })
                     ->multiple()
                     ->label('DATA'),
+
+                Filter::make('data_mes_atual')
+                    ->query(function (Builder $query) {
+                        $query->whereMonth('data', Carbon::now()->format('m'));
+                    })
+                    ->default(true)
+                    ->label('MÊS ATUAL'),
+
+                //TODO: CRIAR O FILTRO DE MES BASEADO NO VALOR SELECIONADO NO SELECT
+                //TODO: PAREI O ESTUDO EM
+                // https://filamentphp.com/docs/3.x/tables/filters/query-builder#date-constraints
+                // VER CUSTOM OPERATORS
+
+                /*SelectFilter::make('is_month')
+                    ->options(function () {
+                        $month = [];
+                        $escalado = Escalado::all();
+                        foreach ($escalado as $escalado) {
+                            $month[$escalado->data] = Carbon::parse($escalado->data)->format('m');
+                        }
+                        return array_unique($month);
+                    })
+                    ->query(function (Builder $query) {
+                        $query->whereMonth('data', $get);
+                    })
+                    ->label('MÊS'),*/
             ])
 
             ->actions([

@@ -143,5 +143,11 @@ class Escalado extends Model
         return $this->efetivo->id;
     }
 
+    //funcao para retornar o mes do escalado em formato Carbon 'm'
+    public function getMes() : string
+    {
+        $mes = new Carbon($this->data);
+        return $mes->format('m');
+    }
 }
 

@@ -254,6 +254,8 @@ class PermutaResource extends Resource
             ])
             ->defaultSort('data', 'asc')
             ->filters([
+                //TODO: implementar mesmos filtros que em EscaladoResource
+
                 SelectFilter::make('escala_id')
                     /*->relationship('escala', 'guarnicao_id')*/
                     ->options(function () {
