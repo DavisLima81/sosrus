@@ -213,10 +213,10 @@ class EfetivoResource extends Resource
                     ->searchable()
                     ->label('P/GRAD'),
 
-                TextColumn::make('trigrama')
+                TextColumn::make('rg')
                     ->sortable()
                     ->searchable()
-                    ->label('TRIG'),
+                    ->label('RG'),
 
                 TextColumn::make('nome_guerra')
                     ->sortable()
@@ -230,7 +230,7 @@ class EfetivoResource extends Resource
                     ->color('gray')
                     ->label('USUÁRIO'),
             ])
-            ->defaultSort('trigrama', 'asc')
+            ->defaultSort('rg', 'asc')
             ->filters([
                 //
             ])

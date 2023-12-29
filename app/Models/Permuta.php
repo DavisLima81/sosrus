@@ -73,6 +73,12 @@ class Permuta extends Model
         return $escalado != null;
     }
 
+    public function saiEfetivoRg() : string
+    {
+        $sai_efetivo = Efetivo::find($this->sai_efetivo_id);
+        return $sai_efetivo->rg;
+    }
+
     public function saiEfetivoTrigrama() : string
     {
         $sai_efetivo = Efetivo::find($this->sai_efetivo_id);
@@ -83,5 +89,11 @@ class Permuta extends Model
     {
         $entra_efetivo = Efetivo::find($this->entra_efetivo_id);
         return $entra_efetivo->trigrama;
+    }
+
+    public function entraEfetivoRg() : string
+    {
+        $entra_efetivo = Efetivo::find($this->entra_efetivo_id);
+        return $entra_efetivo->rg;
     }
 }

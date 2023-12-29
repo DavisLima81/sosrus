@@ -10,6 +10,8 @@ use App\Models\EfetivoEscala;
 use App\Models\Escala;
 use App\Models\Escalado;
 use Carbon\Carbon;
+use Doctrine\DBAL\Query;
+use Doctrine\DBAL\Query\QueryBuilder as DoctrineQueryBuilder;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -21,10 +23,12 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\ViewColumn;
+use http\QueryString;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UserResource\Widgets\UserOverview;
+use Illuminate\Support\Facades\Auth;
 
 class EscaladoResource extends Resource
 {
@@ -108,45 +112,75 @@ class EscaladoResource extends Resource
     }
     //enregion
 
+    //region TABLEQUERY adjust
+    protected function getTableQuery(): Builder
+    {
+        $authUser = Auth::user();
+        $user_efetivo = Efetivo::where('user_id', $authUser->id)->pluck('id');
+        if (($authUser->hasRole('super_admin') || ($authUser->hasRole('admin'))) == false) {
+            //filtrar tabela exibindo apenas escalas do efetivo logado
+            return Escalado::where('efetivo_id', $user_efetivo);
+        }
+        return Escalado::all();
+    }
+    //endregion
+
+    //region TABLE
     public static function table(Table $table): Table
     {
         return $table
-                    ->columns([
-                        //
-                        ViewColumn::make('escala_id')
-                            ->view('tables.columns.escalado-escala-guarnicao')
-                            ->sortable()
-                            ->searchable()
-                            ->tooltip('Não usar pesquisa, usar filtro')
-                            ->label('GUARNIÇÃO - ESCALA'),
+            //TODO: checar credenciais para exibir todos escalados
+            ->query(function () {
+                $authUser = Auth::user();
+                $user_efetivo = Efetivo::where('user_id', $authUser->id)->pluck('id');
+                if (($authUser->hasRole('super_admin') || ($authUser->hasRole('admin'))) == false) {
+                    //filtrar tabela exibindo apenas escalas do efetivo logado
+                    return Escalado::where('efetivo_id', $user_efetivo);
+                }
+                return Escalado::where('efetivo_id', 'like', '%');
+            })
+            ->columns([
+                //
+                ViewColumn::make('escala_id')
+                    ->view('tables.columns.escalado-escala-guarnicao')
+                    ->sortable()
+                    ->searchable()
+                    ->tooltip('Não usar pesquisa, usar filtro')
+                    ->label('GUARNIÇÃO - ESCALA'),
 
-                        TextColumn::make('data')
-                            ->date('d/m/Y')
-                            ->sortable()
-                            ->searchable()
-                            ->label('DATA'),
+                TextColumn::make('data')
+                    ->date('d/m/Y')
+                    ->sortable()
+                    ->searchable()
+                    ->label('DATA'),
 
-                        TextColumn::make('efetivo_trig()')
-                            ->default(function (Model $record) : string {
-                                return $record->efetivo_trig();
-                            })
-                            ->label('TRIG'),
+                TextColumn::make('efetivo_rg()')
+                    ->default(function (Model $record) : string {
+                        return $record->efetivo_rg();
+                    })
+                    ->label('RG'),
 
-                        TextColumn::make('tem_permuta')
-                            ->state(function (Model $record) : string {
-                                if ($record->temPermuta() == 1)
-                                    return 'SIM';
-                                else
-                                    return 'NÃO';
-                            })
-                            ->badge()
-                            ->color(fn (string $state): string => match ($state) {
-                                'SIM' => 'warning',
-                                'NÃO' => 'gray',
-                            })
-                            ->label('PERMUTA'),
+                TextColumn::make('efetivo_nome_guerra()')
+                    ->default(function (Model $record) : string {
+                        return $record->efetivo_nome_guerra();
+                    })
+                    ->label('GUERRA'),
 
-                    ])
+                TextColumn::make('tem_permuta')
+                    ->state(function (Model $record) : string {
+                        if ($record->temPermuta() == 1)
+                            return 'SIM';
+                        else
+                            return 'NÃO';
+                    })
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'SIM' => 'warning',
+                        'NÃO' => 'gray',
+                    })
+                    ->label('PERMUTA'),
+
+            ])
             ->defaultSort('data', 'asc')
             ->filters([
                 SelectFilter::make('escala_id')
@@ -166,7 +200,7 @@ class EscaladoResource extends Resource
                         $data = [];
                         $escalado = Escalado::all();
                         foreach ($escalado as $escalado) {
-                                $data[$escalado->data] = Carbon::parse($escalado->data)->format('d/m/Y');
+                            $data[$escalado->data] = Carbon::parse($escalado->data)->format('d/m/Y');
                         }
                         return array_unique($data);
                     })
@@ -187,6 +221,7 @@ class EscaladoResource extends Resource
                 Tables\Actions\CreateAction::make(),
             ]);
     }
+    //endregion
 
     public static function getRelations(): array
     {

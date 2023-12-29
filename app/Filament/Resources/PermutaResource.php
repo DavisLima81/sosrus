@@ -10,6 +10,7 @@ use App\Models\Escala;
 use App\Models\Escalado;
 use App\Models\Permuta;
 use App\Models\PermutaPrazo;
+use App\Rules\LogadoNaoPermutado;
 use App\Rules\NaoConsta;
 use App\Rules\NaoVazio;
 use Filament\Forms;
@@ -24,6 +25,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class PermutaResource extends Resource
 {
@@ -58,7 +60,14 @@ class PermutaResource extends Resource
                                     ->relationship('escala', 'nome')
                                     ->options(function () {
                                         $escala_show = [];
-                                        $escala = Escala::all();
+                                        $auth_user = Auth::user();
+                                        $auth_efetivo_id = Auth::user()->efetivo()->first()->id;
+                                        $efetivo_escala = EfetivoEscala::where('efetivo_id', $auth_efetivo_id)->get();
+                                        if (($auth_user->hasRole('super_admin')) || ($auth_user->hasRole('admin'))){
+                                            $escala = Escala::all();
+                                        } else {
+                                            $escala = Escala::whereIn('id', $efetivo_escala->pluck('escala_id'))->get();
+                                        }
                                         foreach ($escala as $escala) {
                                             $escala_show[$escala->id] = $escala->guarnicao->sigla . ' - ' . $escala->nome;
                                         }
@@ -68,7 +77,7 @@ class PermutaResource extends Resource
                                     ->afterStateUpdated(function(callable $set) {
                                         $set('data', null);
                                         $set('sai_efetivo_id', null);
-                                        $set('sai_efetivo_trigrama', null);
+                                        $set('sai_efetivo_rg', null);
                                         $set('entra_efetivo_id', null);
                                     })
                                     ->live()
@@ -79,7 +88,7 @@ class PermutaResource extends Resource
                                     ->label('Data')
                                     ->displayFormat('d/m/Y')
                                     ->afterStateUpdated(function (callable $set, callable $get) {
-                                        //region SET TRIGRAMA
+                                        //region SET rg
                                         $escalado = Escalado::where('escala_id', $get('escala_id'))
                                             ->where('data', $get('data'))
                                             ->first();
@@ -90,14 +99,14 @@ class PermutaResource extends Resource
                                         if ($permuta) {
                                             $sai_efetivo = Efetivo::where('id', $permuta->entra_efetivo_id)->first();
                                             $set('sai_efetivo_id', $sai_efetivo->id);
-                                            $set('sai_efetivo_trigrama', $sai_efetivo->trigrama);
+                                            $set('sai_efetivo_rg', $sai_efetivo->rg);
                                         } else if ($escalado) {
                                             $sai_efetivo = Efetivo::where('id', $escalado->efetivo_id)->first();
                                             $set('sai_efetivo_id', $sai_efetivo->id);
-                                            $set('sai_efetivo_trigrama', $sai_efetivo->trigrama);
+                                            $set('sai_efetivo_rg', $sai_efetivo->rg);
                                         } else {
                                             $set('sai_efetivo_id', '');
-                                            $set('sai_efetivo_trigrama', 'N/C');
+                                            $set('sai_efetivo_rg', 'N/C');
                                         }
                                         //// endregion
                                         //// region SET NO_PRAZO
@@ -116,7 +125,8 @@ class PermutaResource extends Resource
                                     ->live()
                                     ->required()
                                     ->columnSpan(1),
-                                Forms\Components\TextInput::make('sai_efetivo_trigrama')
+
+                                Forms\Components\TextInput::make('sai_efetivo_rg')
                                     ->label('Sai')
                                     ->helperText('N/C: não consta')
                                     ->live()
@@ -129,13 +139,28 @@ class PermutaResource extends Resource
                                 Forms\Components\Select::make('entra_efetivo_id')
                                     ->options(function (callable $get) {
                                         $sai_efetivo_id = $get('sai_efetivo_id');
+                                        $auth_user = Auth::user();
+                                        $auth_efetivo_id = Auth::user()->efetivo()->first()->id;
                                         $efetivo_escala = EfetivoEscala::where('escala_id', $get('escala_id'))->get();
                                         $efetivos = Efetivo::whereIn('id', $efetivo_escala->pluck('efetivo_id'))->get();
-                                        if ($sai_efetivo_id == null) {
-                                            return $efetivos->pluck('trigrama', 'id');
+
+                                        if (($auth_user->hasRole('super_admin')) || ($auth_user->hasRole('admin'))){
+                                            if ($sai_efetivo_id == null) {
+                                                return $efetivos->pluck('rg', 'id');
+                                            }   else {
+                                                $a[0] = $sai_efetivo_id;
+                                                return Efetivo::whereIn('id', $efetivo_escala->pluck('efetivo_id'))->whereNotIn('id', $a)->pluck('rg', 'id');
+                                            }
                                         } else {
-                                            $a[0] = $sai_efetivo_id;
-                                            return Efetivo::whereIn('id', $efetivo_escala->pluck('efetivo_id'))->whereNotIn('id', $a)->pluck('trigrama', 'id');
+                                            if ($sai_efetivo_id == null) {
+                                                return $efetivos->pluck('rg', 'id');
+                                            } else if (($sai_efetivo_id != null) && ($sai_efetivo_id != $auth_efetivo_id)) {
+                                                $a[0] = $sai_efetivo_id;
+                                                return Efetivo::where('id', $auth_efetivo_id)->pluck('rg', 'id');
+                                            } else {
+                                                $a[0] = $sai_efetivo_id;
+                                                return Efetivo::whereIn('id', $efetivo_escala->pluck('efetivo_id'))->whereNotIn('id', $a)->pluck('rg', 'id');
+                                            }
                                         }
                                     })
                                     ->disabled(fn (callable $get) => !$get('data'))
@@ -152,7 +177,7 @@ class PermutaResource extends Resource
                                     ->live()
                                     ->columnSpan(1),
                                 Forms\Components\Select::make('autorizador_id')
-                                    ->relationship('autorizador', 'trigrama')
+                                    ->relationship('autorizador', 'rg')
                                     ->label('Autorizado por')
                                     ->default(null)
                                     ->required(function (callable $get) {
@@ -163,7 +188,7 @@ class PermutaResource extends Resource
                                     })
                                     ->columnSpan(1),
                                 Forms\Components\Hidden::make('sai_efetivo_id')
-                                    //->relationship('sai_efetivo', 'trigrama')
+                                    //->relationship('sai_efetivo', 'rg')
                                     ->live()
                                     ->required()
                                     ->rules([
@@ -201,12 +226,12 @@ class PermutaResource extends Resource
                     ->tooltip('Não usar pesquisa, usar filtro')
                     ->label('GUARNIÇÃO - ESCALA'),
 
-                TextColumn::make('sai_efetivo.trigrama')
+                TextColumn::make('sai_efetivo.nome_guerra')
                     ->sortable()
                     ->searchable()
                     ->label('SAI'),
 
-                TextColumn::make('entra_efetivo.trigrama')
+                TextColumn::make('entra_efetivo.nome_guerra')
                     ->sortable()
                     ->searchable()
                     ->label('ENTRA'),
@@ -270,5 +295,16 @@ class PermutaResource extends Resource
             'create' => Pages\CreatePermuta::route('/create'),
             'edit' => Pages\EditPermuta::route('/{record}/edit'),
         ];
+    }
+
+    public function checarUserPermutado($id)
+    {
+        $user = Auth::user();
+        $permuta = Permuta::find($id);
+        if ($user->id == $permuta->sai_efetivo_id || $user->id == $permuta->entra_efetivo_id) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
