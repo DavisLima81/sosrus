@@ -16,4 +16,9 @@ class ListEscalados extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+
+    public function getSubheading(): ?string
+    {
+        return __('MINHAS ESCALAS: XXX, YYY, ZZZ');
+    }
 }

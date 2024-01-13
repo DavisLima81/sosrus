@@ -10,10 +10,13 @@ use App\Models\Escala;
 use App\Models\Escalado;
 use App\Models\Permuta;
 use App\Models\PermutaPrazo;
+use App\Rules\DataForaDoPrazo;
+use App\Rules\DataMaiorQueHoje;
 use App\Rules\LogadoNaoPermutado;
 use App\Rules\NaoConsta;
 use App\Rules\NaoVazio;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -21,6 +24,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -123,6 +127,9 @@ class PermutaResource extends Resource
                                         //// endregion
                                     })
                                     ->live()
+                                    ->rules([
+                                        new DataForaDoPrazo(),
+                                    ])
                                     ->required()
                                     ->columnSpan(1),
 
@@ -211,6 +218,17 @@ class PermutaResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            //CHECA CREDENCIAIS e exibe registros conforme
+            ->query(function () {
+                $authUser = Auth::user();
+                $user_efetivo = Efetivo::where('user_id', $authUser->id)->pluck('id');
+                $escalas = EfetivoEscala::where('efetivo_id', $user_efetivo)->pluck('escala_id');
+                if (($authUser->hasRole('super_admin') || ($authUser->hasRole('admin'))) == false) {
+                    //filtrar tabela exibindo apenas escalas do efetivo logado
+                    return Permuta::whereIn('escala_id', $escalas);
+                }
+                return Permuta::where('entra_efetivo_id', 'like', '%')->orwhere('sai_efetivo_id', 'like', '%');
+            })
             ->columns([
                 //
                 TextColumn::make('data')
@@ -224,17 +242,35 @@ class PermutaResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->tooltip('Não usar pesquisa, usar filtro')
-                    ->label('GUARNIÇÃO - ESCALA'),
+                    ->label('GRN/ESCALA'),
 
-                TextColumn::make('sai_efetivo.nome_guerra')
-                    ->sortable()
-                    ->searchable()
-                    ->label('SAI'),
+                TextColumn::make('sai_efetivo_rg')
+                    ->default(function (Model $record) : string {
+                        return $record->sai_efetivo()->first()->rg;
+                    })
+                    ->label('SAI (rg)')
+                    ->tooltip('Não usar pesquisa, usar filtro'),
 
-                TextColumn::make('entra_efetivo.nome_guerra')
-                    ->sortable()
-                    ->searchable()
-                    ->label('ENTRA'),
+                TextColumn::make('sai_efetivo_nome')
+                    ->default(function (Model $record) : string {
+                        return $record->sai_efetivo()->first()->nome_guerra;
+                    })
+                    ->label('SAI (guerra)')
+                    ->tooltip('Não usar pesquisa, usar filtro'),
+
+                TextColumn::make('entra_efetivo_rg')
+                    ->default(function (Model $record) : string {
+                        return $record->entra_efetivo()->first()->rg;
+                    })
+                    ->label('ENTRA (rg)')
+                    ->tooltip('Não usar pesquisa, usar filtro'),
+
+                TextColumn::make('entra_efetivo_nome')
+                    ->default(function (Model $record) : string {
+                        return $record->entra_efetivo()->first()->nome_guerra;
+                    })
+                    ->label('ENTRA (guerra)')
+                    ->tooltip('Não usar pesquisa, usar filtro'),
 
                 TextColumn::make('no_prazo')
                     ->state(function (Model $record) : string {
@@ -249,24 +285,36 @@ class PermutaResource extends Resource
                         'NÃO' => 'gray',
                     })
                     ->sortable()
-                    ->label('NO PRAZO'),
+                    ->label('PRAZO'),
 
             ])
             ->defaultSort('data', 'asc')
             ->filters([
-                //TODO: implementar mesmos filtros que em EscaladoResource
-
-                SelectFilter::make('escala_id')
+                //TODO: implementar mesmos filtros, e mesmos que em EscaladoResource
+                Filter::make('escala_id')
                     /*->relationship('escala', 'guarnicao_id')*/
-                    ->options(function () {
-                        $escala_show = [];
-                        $escala = Escala::all();
-                        foreach ($escala as $escala) {
-                            $escala_show[$escala->id] = $escala->guarnicao->sigla . ' - ' . $escala->nome;
-                        }
-                        return $escala_show;
+                    ->form([
+                        Select::make('escala_id')
+                            ->options(function () {
+                                $escala_show = [];
+                                $escala = Escala::all();
+                                foreach ($escala as $escala) {
+                                    $escala_show[$escala->id] = $escala->guarnicao->sigla . '/' . $escala->nome;
+                                }
+                                return $escala_show;
+                            })
+                            ->label('ESCALA')
+                            ->multiple(),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        //dd($data['escala_id']);
+                        return $query
+                            ->where(
+                                $data['escala_id'],
+                                fn (Builder $query, $escala_id): Builder => $query->whereIn('escala_id', $escala_id
+                            ));
+                        //->whereIn('escala_id', $data['escala_id']);
                     })
-                    ->multiple()
                     ->label('ESCALA'),
 
             ])

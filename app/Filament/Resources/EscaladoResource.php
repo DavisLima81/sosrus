@@ -49,6 +49,7 @@ class EscaladoResource extends Resource
 
     protected static bool $shouldRegisterNavigation = true;                         //aplica filtro para acesso apenas a usuario registrado em FilamentServiceProvider
     //endregion
+
     //region FORM
     public static function form(Form $form): Form
     {
@@ -129,13 +130,14 @@ class EscaladoResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            //TODO: checar credenciais para exibir todos escalados
+            //CHECA CREDENCIAIS e exibe registros conforme
             ->query(function () {
                 $authUser = Auth::user();
                 $user_efetivo = Efetivo::where('user_id', $authUser->id)->pluck('id');
+                $escalas = EfetivoEscala::where('efetivo_id', $user_efetivo)->pluck('escala_id');
                 if (($authUser->hasRole('super_admin') || ($authUser->hasRole('admin'))) == false) {
                     //filtrar tabela exibindo apenas escalas do efetivo logado
-                    return Escalado::where('efetivo_id', $user_efetivo);
+                    return Escalado::whereIn('escala_id', $escalas);
                 }
                 return Escalado::where('efetivo_id', 'like', '%');
             })
@@ -146,7 +148,7 @@ class EscaladoResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->tooltip('Não usar pesquisa, usar filtro')
-                    ->label('GUARNIÇÃO - ESCALA'),
+                    ->label('GUARNIÇÃO/ESCALA'),
 
                 TextColumn::make('data')
                     ->date('d/m/Y')
@@ -186,15 +188,41 @@ class EscaladoResource extends Resource
                 SelectFilter::make('escala_id')
                     /*->relationship('escala', 'guarnicao_id')*/
                     ->options(function () {
+                        $auth_user = Auth::user();
+                        $user_efetivo = Efetivo::where('user_id', $auth_user->id)->pluck('id');
+                        $escalas = EfetivoEscala::where('efetivo_id', $user_efetivo)->pluck('escala_id');
                         $escala_show = [];
-                        $escala = Escala::all();
-                        foreach ($escala as $escala) {
-                            $escala_show[$escala->id] = $escala->guarnicao->sigla . ' - ' . $escala->nome;
+                        if (($auth_user->hasRole('super_admin') || ($auth_user->hasRole('admin'))) == false) {
+                            //filtrar tabela exibindo apenas escalas do efetivo logado
+                            $escalas = Escala::whereIn('id', $escalas)->get();
+                            foreach ($escalas as $escala) {
+                                $escala_show[$escala->id] = $escala->guarnicao->sigla . '/' . $escala->nome;
+                            }
+                            return $escala_show;
+                        } else {
+                        $escalas = Escala::all();
+                        foreach ($escalas as $escala) {
+                            $escala_show[$escala->id] = $escala->guarnicao->sigla . '/' . $escala->nome;
                         }
                         return $escala_show;
+                        }
                     })
                     ->multiple()
                     ->label('ESCALA'),
+                /*
+                 ->query(function () {
+                $authUser = Auth::user();
+                $user_efetivo = Efetivo::where('user_id', $authUser->id)->pluck('id');
+                $escalas = EfetivoEscala::where('efetivo_id', $user_efetivo)->pluck('escala_id');
+                if (($authUser->hasRole('super_admin') || ($authUser->hasRole('admin'))) == false) {
+                    //filtrar tabela exibindo apenas escalas do efetivo logado
+                    return Escalado::whereIn('escala_id', $escalas);
+                }
+                return Escalado::where('efetivo_id', 'like', '%');
+            })
+                 * */
+
+
                 SelectFilter::make('data')
                     ->options(function () {
                         $data = [];
@@ -219,17 +247,18 @@ class EscaladoResource extends Resource
                 // https://filamentphp.com/docs/3.x/tables/filters/query-builder#date-constraints
                 // VER CUSTOM OPERATORS
 
-                /*SelectFilter::make('is_month')
+                /*SelectFilter::make('select_month')
                     ->options(function () {
-                        $month = [];
+                        $meses = [];
                         $escalado = Escalado::all();
                         foreach ($escalado as $escalado) {
-                            $month[$escalado->data] = Carbon::parse($escalado->data)->format('m');
+                            $meses[$escalado->data] = Carbon::parse($escalado->data)->format('m');
                         }
-                        return array_unique($month);
+                        return array_unique($meses);
                     })
-                    ->query(function (Builder $query) {
-                        $query->whereMonth('data', $get);
+                    ->query(function (Builder $query, array $data): Builder {
+                        dd($data['select_month']);
+                        $query->whereMonth('data', $data['select_month']);
                     })
                     ->label('MÊS'),*/
             ])
