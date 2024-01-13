@@ -83,6 +83,22 @@ class Escalado extends Model
         return 'N/A';
     }
 
+    public function getRgPermuta() : string
+    {
+        if ($this->temPermuta()) {
+            return $this->getPermutas()->last()->entra_efetivo->rg;
+        }
+        return 'N/A';
+    }
+
+    public function getNomeGuerraPermuta() : string
+    {
+        if ($this->temPermuta()) {
+            return $this->getPermutas()->last()->entra_efetivo->nome_guerra;
+        }
+        return 'N/A';
+    }
+
     public function efetivo_trig() : string
     {
         if($this->temPermuta())
@@ -90,6 +106,24 @@ class Escalado extends Model
             return $this->getTrigramaPermuta();
         }
         return $this->efetivo->trigrama;
+    }
+
+    public function efetivo_rg() : string
+    {
+        if($this->temPermuta())
+        {
+            return $this->getRgPermuta();
+        }
+        return $this->efetivo->rg;
+    }
+
+    public function efetivo_nome_guerra() : string
+    {
+        if($this->temPermuta())
+        {
+            return $this->getNomeGuerraPermuta();
+        }
+        return $this->efetivo->nome_guerra;
     }
 
     public function getEfetivoIdPermuta() : string
@@ -109,5 +143,11 @@ class Escalado extends Model
         return $this->efetivo->id;
     }
 
+    //funcao para retornar o mes do escalado em formato Carbon 'm'
+    public function getMes() : string
+    {
+        $mes = new Carbon($this->data);
+        return $mes->format('m');
+    }
 }
 

@@ -10,6 +10,8 @@ use App\Models\EfetivoEscala;
 use App\Models\Escala;
 use App\Models\Escalado;
 use Carbon\Carbon;
+use Doctrine\DBAL\Query;
+use Doctrine\DBAL\Query\QueryBuilder as DoctrineQueryBuilder;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -21,10 +23,12 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\ViewColumn;
+use http\QueryString;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UserResource\Widgets\UserOverview;
+use Illuminate\Support\Facades\Auth;
 
 class EscaladoResource extends Resource
 {
@@ -45,6 +49,7 @@ class EscaladoResource extends Resource
 
     protected static bool $shouldRegisterNavigation = true;                         //aplica filtro para acesso apenas a usuario registrado em FilamentServiceProvider
     //endregion
+
     //region FORM
     public static function form(Form $form): Form
     {
@@ -108,70 +113,154 @@ class EscaladoResource extends Resource
     }
     //enregion
 
+    //region TABLEQUERY adjust
+    protected function getTableQuery(): Builder
+    {
+        $auth_user = Auth::user();
+        $user_efetivo = Efetivo::where('user_id', $auth_user->id)->pluck('id');
+        if (($auth_user->hasRole('super_admin') || ($auth_user->hasRole('admin'))) == false) {
+            //filtrar tabela exibindo apenas escalas do efetivo logado
+            return Escalado::where('efetivo_id', $user_efetivo);
+        }
+        return Escalado::all();
+    }
+    //endregion
+
+    //region TABLE
     public static function table(Table $table): Table
     {
         return $table
-                    ->columns([
-                        //
-                        ViewColumn::make('escala_id')
-                            ->view('tables.columns.escalado-escala-guarnicao')
-                            ->sortable()
-                            ->searchable()
-                            ->tooltip('Não usar pesquisa, usar filtro')
-                            ->label('GUARNIÇÃO - ESCALA'),
+            //CHECA CREDENCIAIS e exibe registros conforme
+            ->query(function () {
+                $auth_user = Auth::user();
+                $user_efetivo = Efetivo::where('user_id', $auth_user->id)->pluck('id');
+                $escalas = EfetivoEscala::where('efetivo_id', $user_efetivo)->pluck('escala_id');
+                if (($auth_user->hasRole('super_admin') || ($auth_user->hasRole('admin'))) == false) {
+                    //filtrar tabela exibindo apenas escalas do efetivo logado
+                    return Escalado::whereIn('escala_id', $escalas);
+                }
+                return Escalado::where('efetivo_id', 'like', '%');
+            })
+            ->columns([
+                //
+                ViewColumn::make('escala_id')
+                    ->view('tables.columns.escalado-escala-guarnicao')
+                    ->sortable()
+                    ->searchable()
+                    ->tooltip('Não usar pesquisa, usar filtro')
+                    ->label('GUARNIÇÃO/ESCALA'),
 
-                        TextColumn::make('data')
-                            ->date('d/m/Y')
-                            ->sortable()
-                            ->searchable()
-                            ->label('DATA'),
+                TextColumn::make('data')
+                    ->date('d/m/Y')
+                    ->sortable()
+                    ->searchable()
+                    ->label('DATA'),
 
-                        TextColumn::make('efetivo_trig()')
-                            ->default(function (Model $record) : string {
-                                return $record->efetivo_trig();
-                            })
-                            ->label('TRIG'),
+                TextColumn::make('efetivo_rg()')
+                    ->default(function (Model $record) : string {
+                        return $record->efetivo_rg();
+                    })
+                    ->label('RG'),
 
-                        TextColumn::make('tem_permuta')
-                            ->state(function (Model $record) : string {
-                                if ($record->temPermuta() == 1)
-                                    return 'SIM';
-                                else
-                                    return 'NÃO';
-                            })
-                            ->badge()
-                            ->color(fn (string $state): string => match ($state) {
-                                'SIM' => 'warning',
-                                'NÃO' => 'gray',
-                            })
-                            ->label('PERMUTA'),
+                TextColumn::make('efetivo_nome_guerra()')
+                    ->default(function (Model $record) : string {
+                        return $record->efetivo_nome_guerra();
+                    })
+                    ->label('GUERRA'),
 
-                    ])
+                TextColumn::make('tem_permuta')
+                    ->state(function (Model $record) : string {
+                        if ($record->temPermuta() == 1)
+                            return 'SIM';
+                        else
+                            return 'NÃO';
+                    })
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'SIM' => 'warning',
+                        'NÃO' => 'gray',
+                    })
+                    ->label('PERMUTA'),
+
+            ])
             ->defaultSort('data', 'asc')
             ->filters([
                 SelectFilter::make('escala_id')
                     /*->relationship('escala', 'guarnicao_id')*/
                     ->options(function () {
+                        $auth_user = Auth::user();
+                        $user_efetivo = Efetivo::where('user_id', $auth_user->id)->pluck('id');
+                        $escalas = EfetivoEscala::where('efetivo_id', $user_efetivo)->pluck('escala_id');
                         $escala_show = [];
-                        $escala = Escala::all();
-                        foreach ($escala as $escala) {
-                            $escala_show[$escala->id] = $escala->guarnicao->sigla . ' - ' . $escala->nome;
+                        if (($auth_user->hasRole('super_admin') || ($auth_user->hasRole('admin'))) == false) {
+                            //filtrar tabela exibindo apenas escalas do efetivo logado
+                            $escalas = Escala::whereIn('id', $escalas)->get();
+                            foreach ($escalas as $escala) {
+                                $escala_show[$escala->id] = $escala->guarnicao->sigla . '/' . $escala->nome;
+                            }
+                            return $escala_show;
+                        } else {
+                        $escalas = Escala::all();
+                        foreach ($escalas as $escala) {
+                            $escala_show[$escala->id] = $escala->guarnicao->sigla . '/' . $escala->nome;
                         }
                         return $escala_show;
+                        }
                     })
                     ->multiple()
                     ->label('ESCALA'),
+                /*
+                 ->query(function () {
+                $auth_user = Auth::user();
+                $user_efetivo = Efetivo::where('user_id', $auth_user->id)->pluck('id');
+                $escalas = EfetivoEscala::where('efetivo_id', $user_efetivo)->pluck('escala_id');
+                if (($auth_user->hasRole('super_admin') || ($auth_user->hasRole('admin'))) == false) {
+                    //filtrar tabela exibindo apenas escalas do efetivo logado
+                    return Escalado::whereIn('escala_id', $escalas);
+                }
+                return Escalado::where('efetivo_id', 'like', '%');
+            })
+                 * */
+
+
                 SelectFilter::make('data')
                     ->options(function () {
                         $data = [];
                         $escalado = Escalado::all();
                         foreach ($escalado as $escalado) {
-                                $data[$escalado->data] = Carbon::parse($escalado->data)->format('d/m/Y');
+                            $data[$escalado->data] = Carbon::parse($escalado->data)->format('d/m/Y');
                         }
                         return array_unique($data);
                     })
                     ->multiple()
                     ->label('DATA'),
+
+                Filter::make('data_mes_atual')
+                    ->query(function (Builder $query) {
+                        $query->whereMonth('data', Carbon::now()->format('m'));
+                    })
+                    ->default(true)
+                    ->label('MÊS ATUAL'),
+
+                //TODO: CRIAR O FILTRO DE MES BASEADO NO VALOR SELECIONADO NO SELECT
+                //TODO: PAREI O ESTUDO EM
+                // https://filamentphp.com/docs/3.x/tables/filters/query-builder#date-constraints
+                // VER CUSTOM OPERATORS
+
+                /*SelectFilter::make('select_month')
+                    ->options(function () {
+                        $meses = [];
+                        $escalado = Escalado::all();
+                        foreach ($escalado as $escalado) {
+                            $meses[$escalado->data] = Carbon::parse($escalado->data)->format('m');
+                        }
+                        return array_unique($meses);
+                    })
+                    ->query(function (Builder $query, array $data): Builder {
+                        dd($data['select_month']);
+                        $query->whereMonth('data', $data['select_month']);
+                    })
+                    ->label('MÊS'),*/
             ])
 
             ->actions([
@@ -187,6 +276,7 @@ class EscaladoResource extends Resource
                 Tables\Actions\CreateAction::make(),
             ]);
     }
+    //endregion
 
     public static function getRelations(): array
     {

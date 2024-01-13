@@ -4,12 +4,12 @@
         <div class="card-body items-center text-center">
             <h2 class="card-title">DETALHES DO ESCALADO</h2>
             <br><br>
-            <p>{{ 'SIGLA:  ' . $this->record->escala->guarnicao->sigla . ' - ' . $this->record->escala->nome}}</p>
+            <p>{{ 'SIGLA:  ' . $this->record->escala->guarnicao->sigla . '/' . $this->record->escala->nome}}</p>
             <p>{{ 'DATA:  ' . $this->record->getEscaladoDia() }}</p>
         </div>
     </div>
     <br>
-    <p>{{ 'DESCRIÇÃO:  ' . $this->record->escala->descricao  . ' - ' . $this->record->escala->guarnicao->descricao}}</p>
+    <p>{{ 'DESCRIÇÃO:  ' . $this->record->escala->descricao  . '/' . $this->record->escala->guarnicao->descricao}}</p>
     <br>
 
     <div class="hero bg-base-400">

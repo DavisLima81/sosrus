@@ -45,6 +45,7 @@ class UserResource extends Resource
                     ->label('Nome'),
                 Forms\Components\TextInput::make('email')
                     ->email()
+                    ->unique(ignoreRecord: true)
                     ->required()
                     ->label('Email'),
                 // Using Select Component

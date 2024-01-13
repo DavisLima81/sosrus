@@ -18,7 +18,7 @@ class EscaladoPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_meu::servico');
+        return $user->can('view_any_escalado');
     }
 
     /**
@@ -30,7 +30,7 @@ class EscaladoPolicy
      */
     public function view(User $user, Escalado $escalado): bool
     {
-        return $user->can('view_meu::servico');
+        return $user->can('view_escalado');
     }
 
     /**
@@ -41,7 +41,7 @@ class EscaladoPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_meu::servico');
+        return $user->can('create_escalado');
     }
 
     /**
@@ -53,7 +53,7 @@ class EscaladoPolicy
      */
     public function update(User $user, Escalado $escalado): bool
     {
-        return $user->can('update_meu::servico');
+        return $user->can('update_escalado');
     }
 
     /**
@@ -65,7 +65,7 @@ class EscaladoPolicy
      */
     public function delete(User $user, Escalado $escalado): bool
     {
-        return $user->can('delete_meu::servico');
+        return $user->can('delete_escalado');
     }
 
     /**
@@ -76,7 +76,7 @@ class EscaladoPolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_meu::servico');
+        return $user->can('delete_any_escalado');
     }
 
     /**
@@ -88,7 +88,7 @@ class EscaladoPolicy
      */
     public function forceDelete(User $user, Escalado $escalado): bool
     {
-        return $user->can('force_delete_meu::servico');
+        return $user->can('force_delete_escalado');
     }
 
     /**
@@ -99,7 +99,7 @@ class EscaladoPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_meu::servico');
+        return $user->can('force_delete_any_escalado');
     }
 
     /**
@@ -111,7 +111,7 @@ class EscaladoPolicy
      */
     public function restore(User $user, Escalado $escalado): bool
     {
-        return $user->can('restore_meu::servico');
+        return $user->can('restore_escalado');
     }
 
     /**
@@ -122,7 +122,7 @@ class EscaladoPolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_meu::servico');
+        return $user->can('restore_any_escalado');
     }
 
     /**
@@ -134,7 +134,7 @@ class EscaladoPolicy
      */
     public function replicate(User $user, Escalado $escalado): bool
     {
-        return $user->can('replicate_meu::servico');
+        return $user->can('replicate_escalado');
     }
 
     /**
@@ -145,7 +145,7 @@ class EscaladoPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_meu::servico');
+        return $user->can('reorder_escalado');
     }
 
 }
