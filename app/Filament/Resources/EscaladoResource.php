@@ -116,9 +116,9 @@ class EscaladoResource extends Resource
     //region TABLEQUERY adjust
     protected function getTableQuery(): Builder
     {
-        $authUser = Auth::user();
-        $user_efetivo = Efetivo::where('user_id', $authUser->id)->pluck('id');
-        if (($authUser->hasRole('super_admin') || ($authUser->hasRole('admin'))) == false) {
+        $auth_user = Auth::user();
+        $user_efetivo = Efetivo::where('user_id', $auth_user->id)->pluck('id');
+        if (($auth_user->hasRole('super_admin') || ($auth_user->hasRole('admin'))) == false) {
             //filtrar tabela exibindo apenas escalas do efetivo logado
             return Escalado::where('efetivo_id', $user_efetivo);
         }
@@ -132,10 +132,10 @@ class EscaladoResource extends Resource
         return $table
             //CHECA CREDENCIAIS e exibe registros conforme
             ->query(function () {
-                $authUser = Auth::user();
-                $user_efetivo = Efetivo::where('user_id', $authUser->id)->pluck('id');
+                $auth_user = Auth::user();
+                $user_efetivo = Efetivo::where('user_id', $auth_user->id)->pluck('id');
                 $escalas = EfetivoEscala::where('efetivo_id', $user_efetivo)->pluck('escala_id');
-                if (($authUser->hasRole('super_admin') || ($authUser->hasRole('admin'))) == false) {
+                if (($auth_user->hasRole('super_admin') || ($auth_user->hasRole('admin'))) == false) {
                     //filtrar tabela exibindo apenas escalas do efetivo logado
                     return Escalado::whereIn('escala_id', $escalas);
                 }
@@ -211,10 +211,10 @@ class EscaladoResource extends Resource
                     ->label('ESCALA'),
                 /*
                  ->query(function () {
-                $authUser = Auth::user();
-                $user_efetivo = Efetivo::where('user_id', $authUser->id)->pluck('id');
+                $auth_user = Auth::user();
+                $user_efetivo = Efetivo::where('user_id', $auth_user->id)->pluck('id');
                 $escalas = EfetivoEscala::where('efetivo_id', $user_efetivo)->pluck('escala_id');
-                if (($authUser->hasRole('super_admin') || ($authUser->hasRole('admin'))) == false) {
+                if (($auth_user->hasRole('super_admin') || ($auth_user->hasRole('admin'))) == false) {
                     //filtrar tabela exibindo apenas escalas do efetivo logado
                     return Escalado::whereIn('escala_id', $escalas);
                 }
